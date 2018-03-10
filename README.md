@@ -1,0 +1,2 @@
+# CoMoCo
+This is the repository used by Ruijia Wang, Nicolas Freundler and Frederic Freundler for the course "Computational Motor Control", given in the spring semester of 2018 by Prof. Auke Ijspeert at Swiss Institute of Technology Lausanne (EPFL). It contains exercises given by the professor and his teaching assistants, consisting in code written by them and customised by us, and it also contains a miniproject on which we had to work in the scope of this course. Enjoy!
