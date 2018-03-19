@@ -2,6 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import sympy
 
 from biopack import integrate, DEFAULT
 import biolog
@@ -24,23 +25,37 @@ def integration(x0, time, A, name, **kwargs):
 def exercise2():
     """ Exercise 2 """
     biolog.info("Running exercise 2")
-
     # System definition
-    biolog.warning("Proper matrix A must be implemented")
-    A = np.array([[1, 0], [0, 1]])
+    A = np.array([[1, 4], [-4, -2]])
+    # system_analysis of the matrix A
+    # Solve for the fixed point
+    x = sympy.symbols(["x{}".format(i) for i in range(2)]) # used to denominate the x = (x,y) vector just as follow: x = (x[0], x[1])
+    sol = sympy.solve(np.dot(A, x), x) # Use solve() to solve algebraic equations. We suppose all equations are equaled to 0, so solving x**2 == 1 translates into the following code: solve(x**2 - 1, x)
+    x0 = sol[x[0]], sol[x[1]]
+    biolog.info("Fixed point: {}".format(x0))
+    # Solve for the eigenvalues/vectors
+    eigenvalues, eigenvectors = np.linalg.eig(A)
+    biolog.info("Eigenvalues: {}".format(eigenvalues))
+    biolog.info("Eigenvectors:\n{}".format(eigenvectors))
     time_total = 10
     time_step = 0.01
+    # Reset initial conditions in order to display the phase portrait
     x0, time = [0, 1], np.arange(0, time_total, time_step)
 
     # Normal run
-    biolog.warning("System integration must be implemented")
-    # integration(x0, time, A, "example")
+    biolog.info("System integration implemented")
+    integration(x0, time, A, "system_integration")
 
     # Stable point (Optional)
-    biolog.warning("Stable point integration must be implemented")
+    biolog.info("Stable point integration implemented")
+    x0 = [0,0] # calculated by hand
+    integration(x0, time, A, "stable") 
 
     # Periodic
-    biolog.warning("Periodic system must be implemented")
+    biolog.info("Periodic system implemented")
+    A = np.array([[2,4],[-4,-2]])
+    x0 = [1,0]
+    integration(x0, time, A, "periodic")
 
     # Plot
     if DEFAULT["save_figures"] is False:

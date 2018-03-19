@@ -1,5 +1,5 @@
 """ Hopf oscillator """
-
+import biolog
 
 class HopfParameters(object):
     """ Hopf Parameters """
@@ -42,14 +42,18 @@ class CoupledHopfParameters(HopfParameters):
         assert self.omega >= 0, "Omega must be positive"
         assert self.k >= 0, "K must be positive"
         return
-
+dx = [0,0]
+dx1 = [0,0,0,0]
 
 def hopf_equation(x, _=None, params=HopfParameters(mu=1., omega=1.0)):
     """ Hopf oscillator equation """
     mu = params.mu
     omega = params.omega
-    # biolog.warning("Hopf oscillator equation must be implemented")
-    return [0, 0]
+   #  biolog.info("Hopf oscillator equation implemented")
+    return [
+        (mu - (x[0]**2 + x[1]**2)) * x[0] - omega * x[1],
+        (mu - (x[0]**2 + x[1]**2)) * x[1] + omega * x[0]
+    ]
 
 
 def coupled_hopf_equation(x, _=None, params=None):
@@ -63,6 +67,11 @@ def coupled_hopf_equation(x, _=None, params=None):
     mu = params.mu
     omega = params.omega
     k = params.k
-    # biolog.warning("Coupled Hopf oscillator equation must be implemented")
-    return [0, 0, 0, 0]
+   # biolog.info("Coupled Hopf oscillator equation implemented")
+    return [
+        (mu[0] - (x[0]**2 + x[1]**2))*x[0] - omega[0]*x[1] + k[0]*x[2],
+        (mu[0] - (x[0]**2 + x[1]**2))*x[1] + omega[0]*x[0],
+        (mu[1] - (x[2]**2 + x[3]**2))*x[2] - omega[1]*x[3] + k[1]*x[0],
+        (mu[1] - (x[3]**2 + x[2]**2))*x[3] + omega[1]*x[2]
+    ]
 
