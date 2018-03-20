@@ -137,18 +137,18 @@ class PendulumParameters(SystemParameters):
         self.parameters['sin'] = kwargs.pop("sin", np.sin)  # Sine function
         # Spring parameters
         self.parameters['k1'] = kwargs.pop(
-            "k1", 100.)  # Spring constant of Spring 1
+            "k1", 5000.)  # Spring constant of Spring 1
         self.parameters['k2'] = kwargs.pop(
-            "k2", 200.)  # Spring constant of Spring 2
+            "k2", 5000.)  # Spring constant of Spring 2
         self.parameters['s_theta_ref1'] = kwargs.pop(
-            "s_theta_ref1", 2.0)  # Spring 1 reference angle
+            "s_theta_ref1", np.pi/6.)  # Spring 1 reference angle
         self.parameters['s_theta_ref2'] = kwargs.pop(
-            "s_theta_ref2", 3.0)  # Spring 2 reference angle
+            "s_theta_ref2", np.pi/6.)  # Spring 2 reference angle
         # Damping parameters
         self.parameters['b1'] = kwargs.pop(
-            "b1", 0.5)  # Damping constant of Damper 1
+            "b1", 50.0)  # Damping constant of Damper 1
         self.parameters['b2'] = kwargs.pop(
-            "b2", 0.5)  # Damping constant of Damper 2
+            "b2", 5.0)  # Damping constant of Damper 2
 
         biolog.info(self)
         return
