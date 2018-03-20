@@ -29,10 +29,10 @@ def exercise1():
     # Simulation Parameters
     t_start = 0.0
     t_stop = 5.0
-    dt = 1.0
+    dt = 0.001
     biolog.warning("Using large time step dt={}".format(dt))
     time = np.arange(t_start, t_stop, dt)
-    x0 = [0.0, 0.0]
+    x0 = [0.5, 0.0] # x0[0] = initial position in rad, x0[1] = initial velocity
 
     res = integrate(pendulum_integration, x0, time, args=(parameters, ))
     res.plot_state("State")
@@ -40,6 +40,7 @@ def exercise1():
 
     if DEFAULT["save_figures"] is False:
         plt.show()
+        plt.title("Start angle for spring one = {}".format(PendulumParameters.s_theta_ref1))
     return
 
 

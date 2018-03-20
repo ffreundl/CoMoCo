@@ -32,7 +32,7 @@ def pendulum_equation(theta, dtheta, parameters=PendulumParameters()):
         parameters.b1,
         parameters.b2
     )
-    return 0
+    return (-g/L)*(np.sin(theta)) + k1*(s_theta_ref1 - theta) + k2*(s_theta_ref2 - theta) # returns theta-point-point, which is integrated afterwards
 
 
 def pendulum_system(theta, dtheta, parameters=PendulumParameters()):
