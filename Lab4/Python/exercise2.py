@@ -80,10 +80,11 @@ def muscle_integrate(muscle, deltaLength, activation=0.05, dt=0.001):
     res['passiveForce'] = muscle.passiveForce
     res['force'] = muscle.force
     res['tendonForce'] = muscle.tendonForce
+    print(res)
     return res
 
 
-def isometric_contraction(muscle, stretch=np.arange(0.0, 0.05, 0.01),
+def isometric_contraction(muscle, stretch=np.arange(0.0, 0.3, 0.01),
                           activation=0.05):
     """ This function implements the isometric contraction
     of the muscle.
@@ -108,9 +109,24 @@ def isometric_contraction(muscle, stretch=np.arange(0.0, 0.05, 0.01),
     t_start = 0.0  # Start time
     t_stop = 0.2  # Stop time
     dt = 0.001  # Time step
+    timesteps = np.arange(t_start,t_stop,dt) # Useless??
+    
+    # Empty vectors for further isometric representations
+    Fp = np.zeros(np.size(stretch)) # passive force
+    Fa = np.zeros(np.size(stretch)) # active force
+    F = np.zeros(np.size(stretch)) # total force
+    
 
-    biolog.warning("Muscle Isometric exercise not implemented")
-    return None
+    biolog.info("Muscle Isometric implemented")
+    for i,s in enumerate(stretch):
+        effect=muscle_integrate(muscle, s, activation, dt)
+        Fp[i]=effect['passiveForce']
+        Fa[i]=effect['activeForce']
+        F[i]=effect['activeForce'] + effect['passiveForce']
+     
+    c = np.array([stretch,Fp, Fa, F])
+    print(c)
+    return c
 
 
 def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
@@ -188,15 +204,30 @@ def exercise2a():
     To do so, you will have to keep the muscle at a constant length and
     observe the force while stimulating the muscle at a constant activation."""
 
-    # Defination of muscles
+    # Definition of muscles
     parameters = MuscleParameters()
     biolog.warning("Loading default muscle parameters")
     biolog.info(parameters.showParameters())
 
     # Create muscle object
     muscle = Muscle.Muscle(parameters)
+    
+    # Isometric contraction
+    isoM = isometric_contraction(muscle)
+    
+    legend = (["Passive Force"],["Active Force"], ["Total Force"])
+    plt.figure('Force vs Length')
+    plt.plot(isoM[0],isoM[1])
+    plt.plot(isoM[0],isoM[2])
+    plt.plot(isoM[0],isoM[3])
+    plt.xlabel('Length')
+    plt.ylabel('Force')
+    plt.legend(legend)
+    plt.grid()
+    save_figure('fig_name')
 
     biolog.warning("Isometric muscle contraction to be implemented")
+    
 
     """ Example for plotting graphs using matplotlib. """
     # plt.figure('fig_name')
