@@ -229,21 +229,22 @@ def exercise2a():
     save_figure('F_vs_length')
     
     # Generation of a new muscle instance, to begin fresh for the experiment where we vary activation DOESNT WORK
-    muscle1 = Muscle.Muscle(parameters)
     plt.figure('Active force vs Length with varying activation time')
     activations = np.arange(0.05,1.05,0.05)
+    legend2 = list()
     print(activations)
-    for a in activations:
+    for i,a in enumerate(activations):
+        muscle1 = Muscle.Muscle(parameters)
         print("Activation = {} [s]".format(a))
         iso = isometric_contraction(muscle1, activation = a)
-        print("lapin {} \n {}".format(iso[0],iso[1]))
-        legend2 = (["Activation = {} [s]".format(a)])
+        print("lapin \n {}".format(iso[2]))
+        legend2.append("Activation = {} [s]".format(a))
         plt.plot(iso[0],iso[2])
-        plt.xlabel('Total length of the contractile element [m]')
-        plt.ylabel('Force [N]')
-        plt.legend(legend2)
-        plt.grid()
-        save_figure('ActiveF_vs_length')
+    plt.xlabel('Total length of the contractile element [m]')
+    plt.ylabel('Force [N]')
+    plt.legend(legend2)
+    plt.grid()
+    save_figure('ActiveF_vs_length')
     
 
     biolog.warning("Isometric muscle contraction to be implemented")
