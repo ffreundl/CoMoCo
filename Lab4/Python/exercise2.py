@@ -228,12 +228,16 @@ def exercise2a():
     plt.grid()
     save_figure('F_vs_length')
     
-    legend2 = (["Active Force"])
-    plt.figure('Active force vs Length')
-    plt.plot(isoM[0],isoM[2])
-    plt.xlabel('Total length of the contractile element [m]')
-    plt.ylabel('Force [N]')
-    plt.legend(legend2)
+    plt.figure('Active force vs Length with varying activation time')
+    activations = np.arange(0.05,1.05,0.05)
+    for a in activations:
+        iso = isometric_contraction(muscle, activation = a)
+        legend2 = (["Activation = {} [s]".format(a)])
+        plt.figure('Active force vs Length with varying activation time')
+        plt.plot(iso[0],iso[2])
+        plt.xlabel('Total length of the contractile element [m]')
+        plt.ylabel('Force [N]')
+        plt.legend(legend2)
     plt.grid()
     save_figure('ActiveF_vs_length')
     
