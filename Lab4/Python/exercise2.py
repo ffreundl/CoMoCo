@@ -84,7 +84,7 @@ def muscle_integrate(muscle, deltaLength, activation=0.05, dt=0.001):
 
 
 def isometric_contraction(muscle, stretch=np.arange(0.0, 0.5, 0.01), # ORIGINAL GOES UP TO 0.05
-                          activation=0.5): # activation original = 0.05
+                          activation = 0.5): # activation original = 0.05
     """ This function implements the isometric contraction
     of the muscle.
 
@@ -124,11 +124,11 @@ def isometric_contraction(muscle, stretch=np.arange(0.0, 0.5, 0.01), # ORIGINAL 
         Fa[i]=effect['activeForce']
         F[i]=effect['force']
         totLen[i]=effect['l_CE']+s
-        print("Length of the contractile element is: {} \n and its TOTAL length+stretch is: {}".format(effect['l_CE'],totLen[i]))
-        print("LIMIT: {} \n {}".format(muscle.l_MTC-muscle.l_CE, muscle.l_slack))
+        #print("Length of the contractile element is: {} \n and its TOTAL length+stretch is: {}".format(effect['l_CE'],totLen[i]))
+        #print("LIMIT: {} \n {}".format(muscle.l_MTC-muscle.l_CE, muscle.l_slack))
         
     c = np.array([totLen,Fp, Fa, F])
-    print(c)
+    #print(c)
     return c
 
 
@@ -228,18 +228,22 @@ def exercise2a():
     plt.grid()
     save_figure('F_vs_length')
     
+    # Generation of a new muscle instance, to begin fresh for the experiment where we vary activation DOESNT WORK
+    muscle1 = Muscle.Muscle(parameters)
     plt.figure('Active force vs Length with varying activation time')
     activations = np.arange(0.05,1.05,0.05)
+    print(activations)
     for a in activations:
-        iso = isometric_contraction(muscle, activation = a)
+        print("Activation = {} [s]".format(a))
+        iso = isometric_contraction(muscle1, activation = a)
+        print("lapin {} \n {}".format(iso[0],iso[1]))
         legend2 = (["Activation = {} [s]".format(a)])
-        plt.figure('Active force vs Length with varying activation time')
         plt.plot(iso[0],iso[2])
         plt.xlabel('Total length of the contractile element [m]')
         plt.ylabel('Force [N]')
         plt.legend(legend2)
-    plt.grid()
-    save_figure('ActiveF_vs_length')
+        plt.grid()
+        save_figure('ActiveF_vs_length')
     
 
     biolog.warning("Isometric muscle contraction to be implemented")
