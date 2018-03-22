@@ -80,12 +80,11 @@ def muscle_integrate(muscle, deltaLength, activation=0.05, dt=0.001):
     res['passiveForce'] = muscle.passiveForce
     res['force'] = muscle.force
     res['tendonForce'] = muscle.tendonForce
-    print(res)
     return res
 
 
-def isometric_contraction(muscle, stretch=np.arange(0.0, 0.3, 0.01),
-                          activation=0.05):
+def isometric_contraction(muscle, stretch=np.arange(0.0, 0.5, 0.01), # ORIGINAL GOES UP TO 0.05
+                          activation=0.5): # activation original = 0.05
     """ This function implements the isometric contraction
     of the muscle.
 
@@ -109,12 +108,13 @@ def isometric_contraction(muscle, stretch=np.arange(0.0, 0.3, 0.01),
     t_start = 0.0  # Start time
     t_stop = 0.2  # Stop time
     dt = 0.001  # Time step
-    timesteps = np.arange(t_start,t_stop,dt) # Useless??
+    #timesteps = np.arange(t_start,t_stop,dt) # Useless??
     
     # Empty vectors for further isometric representations
     Fp = np.zeros(np.size(stretch)) # passive force
     Fa = np.zeros(np.size(stretch)) # active force
     F = np.zeros(np.size(stretch)) # total force
+    totLen = np.zeros(np.size(stretch)) # total length of the CONTRACTILE ELEMENT (l_CE + stretch)
     
 
     biolog.info("Muscle Isometric implemented")
@@ -122,9 +122,12 @@ def isometric_contraction(muscle, stretch=np.arange(0.0, 0.3, 0.01),
         effect=muscle_integrate(muscle, s, activation, dt)
         Fp[i]=effect['passiveForce']
         Fa[i]=effect['activeForce']
-        F[i]=effect['activeForce'] + effect['passiveForce']
-     
-    c = np.array([stretch,Fp, Fa, F])
+        F[i]=effect['force']
+        totLen[i]=effect['l_CE']+s
+        print("Length of the contractile element is: {} \n and its TOTAL length+stretch is: {}".format(effect['l_CE'],totLen[i]))
+        print("LIMIT: {} \n {}".format(muscle.l_MTC-muscle.l_CE, muscle.l_slack))
+        
+    c = np.array([totLen,Fp, Fa, F])
     print(c)
     return c
 
@@ -212,19 +215,28 @@ def exercise2a():
     # Create muscle object
     muscle = Muscle.Muscle(parameters)
     
-    # Isometric contraction
+    # Isometric contraction, varying the activation between [0-1]
     isoM = isometric_contraction(muscle)
-    
-    legend = (["Passive Force"],["Active Force"], ["Total Force"])
-    plt.figure('Force vs Length')
+    legend1 = (["Passive Force"],["Active Force"], ["Total Force"])
+    plt.figure('Forces vs Length')
     plt.plot(isoM[0],isoM[1])
     plt.plot(isoM[0],isoM[2])
     plt.plot(isoM[0],isoM[3])
-    plt.xlabel('Length')
-    plt.ylabel('Force')
-    plt.legend(legend)
+    plt.xlabel('Total length of the contractile element [m]')
+    plt.ylabel('Force [N]')
+    plt.legend(legend1)
     plt.grid()
-    save_figure('fig_name')
+    save_figure('F_vs_length')
+    
+    legend2 = (["Active Force"])
+    plt.figure('Active force vs Length')
+    plt.plot(isoM[0],isoM[2])
+    plt.xlabel('Total length of the contractile element [m]')
+    plt.ylabel('Force [N]')
+    plt.legend(legend2)
+    plt.grid()
+    save_figure('ActiveF_vs_length')
+    
 
     biolog.warning("Isometric muscle contraction to be implemented")
     
