@@ -217,7 +217,7 @@ def exercise2a():
     
     # Isometric contraction, varying the activation between [0-1]
     isoM = isometric_contraction(muscle)
-    legend1 = (["Passive Force"],["Active Force"], ["Total Force"])
+    legend1 = ("Passive Force","Active Force", "Total Force")
     plt.figure('Forces vs Length')
     plt.plot(isoM[0],isoM[1])
     plt.plot(isoM[0],isoM[2])
@@ -228,9 +228,29 @@ def exercise2a():
     plt.grid()
     save_figure('F_vs_length')
     
-    # Generation of a new muscle instance, to begin fresh for the experiment where we vary activation DOESNT WORK
-    plt.figure('Active force vs Length with varying activation time')
+    # Effect of varying l_opt (fiber length) NOT SURE)
+    muscleS=Muscle.Muscle(parameters) # 'short' muscle 
+    muscleS.l_opt=0.1 # short fiber length
+    muscleL=Muscle.Muscle(parameters) # 'long' muscle
+    muscleL.l_opt=0.15 # long fiber length
+    isoS = isometric_contraction(muscleS, stretch=np.arange(0.0, 1, 0.01), activation = 0.2)
+    isoL = isometric_contraction(muscleL, stretch=np.arange(0.0, 1, 0.01), activation = 0.2)
+    legendS = ("Short fibers: {} [m]".format(muscleS.l_opt),"Long fibers: {} [m]".format(muscleL.l_opt))
+    plt.figure('Short and Long muscle fibers (l_opt) active force vs length')
+    plt.plot(isoS[0],isoS[2])
+    plt.plot(isoL[0],isoL[2])
+    plt.xlabel('Total length of the contractile element [m]')
+    plt.ylabel('Force [N]')
+    plt.legend(legendS)
+    plt.grid()
+    save_figure('short_vs_long_')
+    
+    
+    # Effect of varying activation (stimulation)
     activations = np.arange(0.05,1.05,0.05)
+    max_F_Diff = np.zeros(np.size(activations)) # vectors to assess the evolution of the difference of the maximas of passive and active force
+    ratio = np.zeros(np.size(activations)) # to implement the total_force/total_length ratio for every activation value
+    plt.figure('Active force vs Length with varying activation time')
     legend2 = list()
     print(activations)
     for i,a in enumerate(activations):
@@ -239,12 +259,39 @@ def exercise2a():
         iso = isometric_contraction(muscle1, activation = a)
         print("lapin \n {}".format(iso[2]))
         legend2.append("Activation = {} [s]".format(a))
-        plt.plot(iso[0],iso[2])
+        #plt.plot(iso[0],iso[2]) # plot for active force
+        plt.plot(iso[0],iso[3]) # plot for total force
+        max_F_Diff[i]=np.abs(np.max(iso[1])-np.max(iso[2]))
+        ratio[i]=((np.mean(iso[3]))/(np.mean(iso[0])))/1000
     plt.xlabel('Total length of the contractile element [m]')
     plt.ylabel('Force [N]')
     plt.legend(legend2)
     plt.grid()
-    save_figure('ActiveF_vs_length')
+    save_figure('F_vs_length')
+    
+    # Force difference figure
+    plt.figure('Difference between the max of the passive and the active force')
+    plt.plot(activations, max_F_Diff,  color='black', marker='v', linestyle='dashed', linewidth=1, markersize=5)
+    plt.xlabel('Activation value [s]')
+    plt.ylabel('Force Difference [N]')
+    plt.legend(['$\Delta$'])
+    plt.minorticks_on()
+    plt.grid(which='major', linestyle='-', linewidth='0.5', color='red')
+    plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+    save_figure('delta_plot')
+    
+    # Force/length ratio
+    plt.figure('Ratio between the total force (active + passive) and the total length of the contractile element')
+    plt.plot(activations, ratio,  color='black', marker='v', linestyle='dashed', linewidth=1, markersize=5)
+    plt.xlabel('Activation value [s]')
+    plt.ylabel('(Total_force/total_length)/1000  [N]/[m]')
+    plt.legend(['$Ratio$'])
+    plt.minorticks_on()
+    plt.grid(which='major', linestyle='-', linewidth='0.5', color='red')
+    plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+    save_figure('ratio_plot')
+    
+    
     
 
     biolog.warning("Isometric muscle contraction to be implemented")
