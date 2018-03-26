@@ -230,16 +230,17 @@ def exercise2a():
     
     # Effect of varying l_opt (fiber length) NOT SURE)
     muscleS=Muscle.Muscle(parameters) # 'short' muscle 
-    muscleS.l_opt=0.1 # short fiber length
+    muscleS.l_opt=0.11 # short fiber length
     muscleL=Muscle.Muscle(parameters) # 'long' muscle
-    muscleL.l_opt=0.15 # long fiber length
-    isoS = isometric_contraction(muscleS, stretch=np.arange(0.0, 1, 0.01), activation = 0.2)
-    isoL = isometric_contraction(muscleL, stretch=np.arange(0.0, 1, 0.01), activation = 0.2)
-    legendS = ("Short fibers: {} [m]".format(muscleS.l_opt),"Long fibers: {} [m]".format(muscleL.l_opt))
+    muscleL.l_opt=0.5 # long fiber length
+    isoS = isometric_contraction(muscleS, stretch=np.arange(0.0, 0.5, 0.01), activation = 0.2)
+    isoL = isometric_contraction(muscleL, stretch=np.arange(0.0, 5, 0.01), activation = 0.2)
+    legendS = ("Short fibers: {} [m], \n total_length: {} [m]".format(muscleS.l_opt, np.max(isoS[0])),"Long fibers: {} [m], \n total_length: {} [m]".format(muscleL.l_opt, np.max(isoL[0])))
     plt.figure('Short and Long muscle fibers (l_opt) active force vs length')
-    plt.plot(isoS[0],isoS[2])
-    plt.plot(isoL[0],isoL[2])
-    plt.xlabel('Total length of the contractile element [m]')
+    plt.plot((isoS[0])/(np.max(isoS[0])),isoS[2]) # we plot the percentage of total length
+    plt.plot((isoL[0])/(np.max(isoL[0])),isoL[2])
+    #plt.plot(isoL[0],isoL[2])
+    plt.xlabel('Percentage of total length of the contractile element [m]')
     plt.ylabel('Force [N]')
     plt.legend(legendS)
     plt.grid()
@@ -252,12 +253,12 @@ def exercise2a():
     ratio = np.zeros(np.size(activations)) # to implement the total_force/total_length ratio for every activation value
     plt.figure('Active force vs Length with varying activation time')
     legend2 = list()
-    print(activations)
+    #print(activations)
     for i,a in enumerate(activations):
         muscle1 = Muscle.Muscle(parameters)
-        print("Activation = {} [s]".format(a))
+        #print("Activation = {} [s]".format(a))
         iso = isometric_contraction(muscle1, activation = a)
-        print("lapin \n {}".format(iso[2]))
+        #print("lapin \n {}".format(iso[2]))
         legend2.append("Activation = {} [s]".format(a))
         #plt.plot(iso[0],iso[2]) # plot for active force
         plt.plot(iso[0],iso[3]) # plot for total force
