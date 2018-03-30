@@ -189,7 +189,7 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
     """
     load = np.array(load)
 
-    biolog.warning('Exercise 2b isotonic contraction to be implemented')
+    biolog.info('Exercise 2b isotonic contraction implemented')
 
     # Time settings
     t_start = 0.0  # Start time
@@ -206,6 +206,7 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
     V = np.zeros(np.size(load)) # will contain contractile element's velocity for each loads
     temp = np.zeros(np.size(timesteps)) 
     
+    
     for k,l in enumerate(load):
         mass_parameters.mass = l # Set the mass applied on the muscle
         state = np.copy(x0) # reset the state for next iteration
@@ -217,7 +218,8 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
             state[1] = mass_res[-1, 1] # Update state with final position of velocity    
             effect=muscle_integrate(muscle, state[0], 1.0, dt)
             temp[j]=effect['v_CE']
-        print("\n\n {} \n\n {} \n\n".format(temp, effect['l_MTC']))    
+#            print("LMTC TAMERE: {}".format(effect['l_MTC']))
+#        print("\n\n {} \n\n {}".format(effect['l_MTC'],(effect['l_MTC'] > muscle_parameters.l_opt + muscle_parameters.l_slack)))    
         if(effect['l_MTC'] > muscle_parameters.l_opt + muscle_parameters.l_slack):
             V[k] = min(temp)
         else:
@@ -326,7 +328,7 @@ def exercise2a():
     
     
 
-    biolog.warning("Isometric muscle contraction to be implemented")
+    biolog.info("Isometric muscle contraction implemented")
     
 
     """ Example for plotting graphs using matplotlib. """
@@ -358,7 +360,7 @@ def exercise2b():
     # Create muscle object
     muscle = Muscle.Muscle(muscle_parameters)
 
-    biolog.warning("Isotonic muscle contraction to be implemented")
+    biolog.info("Isotonic muscle contraction implemented")
     isoK = isotonic_contraction(muscle)
 
 

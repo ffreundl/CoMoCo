@@ -5,7 +5,7 @@ import biolog
 
 def mass_equation(pos, vel, force, mass_params):
     """ Mass equation"""
-    biolog.warning("Implement the mass and muscle equation")
+#    biolog.warning("Implement the mass and muscle equation")
     a= -(mass_params.g) + (force/(mass_params.mass)) # returns the acceleration
     return a
 
