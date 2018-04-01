@@ -13,6 +13,5 @@ def mass_equation(pos, vel, force, mass_params):
 def mass_system(pos, vel, force, mass_params):
     """ Muscle-Mass System"""
     return np.array(
-        [vel,
-         mass_equation(pos, vel, force, mass_params)])  # X point point)
+        [mass_equation(pos, vel, force, mass_params), vel])  # X point point)
 

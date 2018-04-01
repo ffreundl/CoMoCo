@@ -25,7 +25,7 @@ plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
 
 def mass_integration(state, time, *args):
     """ Function to integrate muscle-mass system """
-    force = args[0]
+    force    = args[0]
     mass_parameters = args[1]
     return mass_system(state[0], state[1], force, mass_parameters)
 
@@ -83,7 +83,7 @@ def muscle_integrate(muscle, deltaLength, activation=0.05, dt=0.001):
     return res
 
 
-def isometric_contraction(muscle, stretch=np.arange(-0.05, 0.05, 0.001), # ORIGINAL GOES UP TO 0.05
+def isometric_contraction(muscle, stretch=np.arange(-0.05, 0.05, 0.001), # !!! stretch is in percent!
                           activation = 0.25): # activation original = 0.05
     """ This function implements the isometric contraction
     of the muscle.
@@ -126,7 +126,7 @@ def isometric_contraction(muscle, stretch=np.arange(-0.05, 0.05, 0.001), # ORIGI
         Fp[i]=effect['passiveForce']
         Fa[i]=effect['activeForce']
         F[i]=effect['force']
-        totLen[i]=effect['l_CE']+s
+        totLen[i]=effect['l_CE']+s*effect['l_CE']
         #print("Length of the contractile element is: {} \n and its TOTAL length+stretch is: {}".format(effect['l_CE'],totLen[i]))
         #print("LIMIT: {} \n {}".format(muscle.l_MTC-muscle.l_CE, muscle.l_slack))   
     c = np.array([totLen,Fp, Fa, F, timesteps, stabs])
@@ -197,12 +197,10 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
     dt = 0.001  # Time step
     timesteps = np.arange(t_start, t_stop, dt)
 
-    x0 = np.array([0.0, 0.0])  # Initial state of the muscle
+    x0 = np.array([muscle_parameters.l_opt, 0.0])  # Initial state of the muscle
     
     # Empty vectors for further isotonic representations
-    Fp = np.zeros(np.size(load)) # passive force
-    Fa = np.zeros(np.size(load)) # active force
-    F = np.zeros(np.size(load)) # total force
+    F = np.zeros(np.size(load)) #  force
     V = np.zeros(np.size(load)) # will contain contractile element's velocity for each loads
     temp = np.zeros(np.size(timesteps)) 
     
@@ -210,22 +208,28 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
     for k,l in enumerate(load):
         mass_parameters.mass = l # Set the mass applied on the muscle
         state = np.copy(x0) # reset the state for next iteration
+        print("The current load is: {}\n\n{}\n\n".format(mass_parameters.mass, "pump-it"))
         for t in timesteps:
             effect=muscle_integrate(muscle, state[0], activation=1.0, dt=dt)
+            print(effect['activeForce'])
         for j,t in enumerate(timesteps):
             mass_res=odeint(mass_integration, state, [t, t+dt], args=(muscle.force, mass_parameters))
             state[0] = mass_res[-1, 0] # Update state with final postion of mass
-            state[1] = mass_res[-1, 1] # Update state with final position of velocity    
+            state[1] = mass_res[-1, 1] # Update state with final position of velocity
             effect=muscle_integrate(muscle, state[0], 1.0, dt)
             temp[j]=effect['v_CE']
+#            print(effect['force'])
+#            print("The velocity is : {}".format(temp[j]))
 #            print("LMTC TAMERE: {}".format(effect['l_MTC']))
 #        print("\n\n {} \n\n {}".format(effect['l_MTC'],(effect['l_MTC'] > muscle_parameters.l_opt + muscle_parameters.l_slack)))    
         if(effect['l_MTC'] > muscle_parameters.l_opt + muscle_parameters.l_slack):
-            V[k] = min(temp)
+            V[k] = min(temp[:])
         else:
-            V[k] = max(temp)
+            V[k] = max(temp[:])
+        F[k]=effect['force']
     print(V)
-    return V
+    print(k,F)
+    return V,F # V = isoK[0], F = isoK[1]
 
 
 def exercise2a():
@@ -263,22 +267,41 @@ def exercise2a():
     
     # Effect of varying l_opt (fiber length) NOT SURE)
     muscleS=Muscle.Muscle(parameters) # 'short' muscle 
-    muscleS.l_opt=0.11 # short fiber length
+    muscleS.l_opt=0.05 # short fiber length
     muscleL=Muscle.Muscle(parameters) # 'long' muscle
-    muscleL.l_opt=0.12 # long fiber length
-    isoS = isometric_contraction(muscleS, stretch=np.arange(-0.05, 0.05, 0.001), activation = 0.25)
-    isoL = isometric_contraction(muscleL, stretch=np.arange(-0.05, 0.05, 0.001), activation = 0.25)
-    legendS = ("Short fibers: {} [m], \n max_total_length: {} [m]".format(muscleS.l_opt, np.max(isoS[0])),"Long fibers: {} [m], \n max_total_length: {} [m]".format(muscleL.l_opt, np.max(isoL[0])))
-    plt.figure('Short and Long muscle fibers (l_opt) active force vs length')
-    plt.plot((isoS[0])/(np.max(isoS[0])),isoS[2]) # we plot the percentage of total length
-    plt.plot((isoL[0])/(np.max(isoL[0])),isoL[2])
-    #plt.plot(isoL[0],isoL[2])
+    muscleL.l_opt=0.25 # long fiber length
+    muscleXL=Muscle.Muscle(parameters) # 'extra long' muscle
+    muscleXL.l_opt=0.50 # extra long fiber length
+    isoS = isometric_contraction(muscleS, stretch=np.arange(-0.25, 0.25, 0.001), activation = 0.25)
+    isoL = isometric_contraction(muscleL, stretch=np.arange(-0.25, 0.25, 0.001), activation = 0.25)
+    isoXL = isometric_contraction(muscleXL, stretch=np.arange(-0.25, 0.25, 0.001), activation = 0.25)
+    legendS = ("Short fibers: {} [m], \n max_total_length: {} [m]".format(muscleS.l_opt, np.max(isoS[0])),"Long fibers: {} [m], \n max_total_length: {} [m]".format(muscleL.l_opt, np.max(isoL[0])),"Extra Long fibers: {} [m], \n max_total_length: {} [m]".format(muscleXL.l_opt, np.max(isoXL[0])))
+    plt.figure('Short, Long and Extra Long muscle fibers (l_opt) active force vs length')
+    plt.title("Stretching of -25% to +25% and activation of 25% for each muscle type")
+    plt.plot((isoS[0])/(np.max(isoS[0]))*100,isoS[2]) # we plot the percentage of total length
+    plt.plot((isoL[0])/(np.max(isoL[0]))*100,isoL[2])
+    plt.plot((isoXL[0])/(np.max(isoXL[0]))*100,isoXL[2])
     plt.xlabel('Percentage of maximal total length (l_CE + stretching) of the contractile element [m]')
-    plt.ylabel('Force [N]')
+    plt.ylabel('Active Force [N]')
     plt.legend(legendS)
     plt.grid()
-    save_figure('short_vs_long_')
+    plt.minorticks_on()
+    plt.grid(which='major', linestyle='-', linewidth='0.5', color='black')
+    plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+    save_figure('short_vs_long_vs_xtraLong')
     
+    legendSx = ("Short fibers: {} [m], \n max_total_length: {} [m]".format(muscleS.l_opt, np.max(isoS[0])),"Long fibers: {} [m], \n max_total_length: {} [m]".format(muscleL.l_opt, np.max(isoL[0])))
+    plt.figure('Short and Long muscle fibers (l_opt) active force vs length')
+    plt.plot(isoS[0],isoS[2])
+    plt.plot(isoL[0],isoL[2])
+    plt.xlabel('Length (l_CE + stretching) of the contractile element [m]')
+    plt.ylabel('Active Force [N]')
+    plt.legend(legendSx)
+    plt.grid()
+    plt.minorticks_on()
+    plt.grid(which='major', linestyle='-', linewidth='0.5', color='black')
+    plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+    save_figure('short_vs_Long')
     
     # Effect of varying activation (stimulation)
     activations = np.arange(0.0,1.05,0.05)
@@ -350,7 +373,7 @@ def exercise2b():
     is allowed contract. The instantaneous velocity at which the muscle
     contracts is of our interest"""
 
-    # Defination of muscles
+    # Definition of muscles
     muscle_parameters = MuscleParameters()
     print(muscle_parameters.showParameters())
 
@@ -360,8 +383,13 @@ def exercise2b():
     # Create muscle object
     muscle = Muscle.Muscle(muscle_parameters)
 
-    biolog.info("Isotonic muscle contraction implemented")
+    # Point 2d. Different load values.
+    biolog.info("Calling for point 2d")
     isoK = isotonic_contraction(muscle)
+    plt.figure("Plot of Force vs Velocity")
+    plt.plot(isoK[0], isoK[1])
+    
+    # Point 2f. Different muscle activation values.
 
 
 def exercise2():
@@ -372,4 +400,3 @@ def exercise2():
 
 if __name__ == '__main__':
     exercise2()
-
