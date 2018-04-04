@@ -134,9 +134,9 @@ def isometric_contraction(muscle, stretch=np.arange(-0.05, 0.05, 0.001), # !!! s
     return c
 
 
-def isotonic_contraction(muscle, load=np.arange(1., 320., 10),
+def isotonic_contraction(muscle, load=np.arange(1., 330., 10),
                          muscle_parameters=MuscleParameters(),
-                         mass_parameters=MassParameters()):
+                         mass_parameters=MassParameters(), activation = 1.0):
 
     """ This function implements the isotonic contraction
     of the muscle.
@@ -189,7 +189,7 @@ def isotonic_contraction(muscle, load=np.arange(1., 320., 10),
     """
     load = np.array(load)
 
-    biolog.info('Exercise 2b isotonic contraction implemented')
+    biolog.info('Exercise 2b isotonic contraction running')
 
     # Time settings
     t_start = 0.0  # Start time
@@ -211,13 +211,13 @@ def isotonic_contraction(muscle, load=np.arange(1., 320., 10),
         state = np.copy(x0) # reset the state for next iteration
 #        print("The current load is: {}\n\n{}\n\n".format(mass_parameters.mass, "pump-it"))
         for t in timecharge:
-            effect=muscle_integrate(muscle, state[0], activation=1.0, dt=dt)
+            effect=muscle_integrate(muscle, state[0], activation, dt=dt)
 #            print(effect['activeForce'])
         for j,t in enumerate(timesteps):
             mass_res=odeint(mass_integration, state, [t, t+dt], args=(muscle.force, mass_parameters))
             state[0] = mass_res[-1, 0] # Update state with final postion of mass
             state[1] = mass_res[-1, 1] # Update state with final position of velocity
-            effect=muscle_integrate(muscle, state[0], 1.0, dt)
+            effect=muscle_integrate(muscle, state[0], activation, dt)
             temp[j]=effect['v_CE']
 #            print(effect['force'])
 #            print("The velocity is : {}".format(temp[j]))
@@ -228,8 +228,8 @@ def isotonic_contraction(muscle, load=np.arange(1., 320., 10),
         else:
             V[k] = max(temp[:])
         F[k]=effect['force']
-    print(V)
-    print(k,F)
+#    print(V)
+#    print(k,F)
     return V,F # V = isoK[0], F = isoK[1]
 
 
@@ -349,7 +349,7 @@ def exercise2a():
     # Force/length ratio
     plt.figure('Ratio between the total force (active + passive) and the total length of the contractile element')
     plt.plot(activations, ratio,  color='black', marker='v', linestyle='dashed', linewidth=1, markersize=5)
-    plt.xlabel('Activation value [s]')
+    plt.xlabel('Activation value [-]')
     plt.ylabel('(Total_force/total_length)/1000  [N]/[m]')
     plt.legend(['$Ratio$'])
     plt.minorticks_on()
@@ -395,16 +395,47 @@ def exercise2b():
     # Point 2d. Different load values.
     biolog.info("Calling for point 2d")
     isoK = isotonic_contraction(muscle)
+    lineV=np.arange(-1,2500, 1)
+    zerV=np.zeros(np.size(lineV))
     plt.figure("Plot of Force vs Velocity")
     plt.plot(isoK[0], isoK[1])
-    plt.plot(isoK[0], isoK[1], 'o', markersize = 5)
-    
+    plt.title("Tension vs Normalised Velocity", fontsize=18)
+    plt.plot(zerV, lineV, linestyle=':', color='red')
+    plt.xlabel('Normalised Velocity [-]')
+    plt.ylabel('Total Force of the Muscle [N]')
+    plt.legend(['Force/Velocity [N]'])
+    plt.minorticks_on()
+    plt.grid(which='major', linestyle='-', linewidth='0.5', color='black')
+    plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+    save_figure('velociplot')
+#    plt.plot(isoK[0], isoK[1], 'o', markersize = 5)
+
     # Point 2f. Different muscle activation values.
+    activations = np.arange(0.5,1.05,0.05)
+    plt.figure('Muscle Force vs Normalised velocity for varying activation time')
+    legend2 = list()
+    #print(activations)
+    for i,a in enumerate(activations):
+        muscle1 = Muscle.Muscle(muscle_parameters)
+        #print("Activation = {} [s]".format(a))
+        iso = isotonic_contraction(muscle1, activation = a)
+        #print("lapin \n {}".format(iso[2]))
+        legend2.append("Activation = {} [-]".format(a))
+        plt.plot(iso[0],iso[1]) # plot for active force
+    plt.xlabel('Normalised Velocity [-]')
+    plt.ylabel('Total Force [N]')
+    plt.plot(zerV, lineV, linestyle=':', color='red')
+    plt.legend(legend2)
+    plt.grid()
+    plt.minorticks_on()
+    plt.grid(which='major', linestyle='-', linewidth='0.5', color='black')
+    plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+    save_figure('F_vs_Vel_Activations')
 
 
 def exercise2():
     """ Exercise 2 """
-#    exercise2a()
+    exercise2a()
     exercise2b()
 
 
