@@ -134,7 +134,7 @@ def isometric_contraction(muscle, stretch=np.arange(-0.05, 0.05, 0.001), # !!! s
     return c
 
 
-def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
+def isotonic_contraction(muscle, load=np.arange(1., 320., 10),
                          muscle_parameters=MuscleParameters(),
                          mass_parameters=MassParameters()):
 
@@ -193,11 +193,12 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
 
     # Time settings
     t_start = 0.0  # Start time
-    t_stop = 0.25  # Stop time
+    t_stop = 0.1  # Stop time
     dt = 0.001  # Time step
     timesteps = np.arange(t_start, t_stop, dt)
+    timecharge=np.arange(0.0, 2.5, dt)
 
-    x0 = np.array([muscle_parameters.l_opt, 0.0])  # Initial state of the muscle
+    x0 = np.array([0.0, 0.0])  # Initial state of the muscle
     
     # Empty vectors for further isotonic representations
     F = np.zeros(np.size(load)) #  force
@@ -208,10 +209,10 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
     for k,l in enumerate(load):
         mass_parameters.mass = l # Set the mass applied on the muscle
         state = np.copy(x0) # reset the state for next iteration
-        print("The current load is: {}\n\n{}\n\n".format(mass_parameters.mass, "pump-it"))
-        for t in timesteps:
+#        print("The current load is: {}\n\n{}\n\n".format(mass_parameters.mass, "pump-it"))
+        for t in timecharge:
             effect=muscle_integrate(muscle, state[0], activation=1.0, dt=dt)
-            print(effect['activeForce'])
+#            print(effect['activeForce'])
         for j,t in enumerate(timesteps):
             mass_res=odeint(mass_integration, state, [t, t+dt], args=(muscle.force, mass_parameters))
             state[0] = mass_res[-1, 0] # Update state with final postion of mass
@@ -240,6 +241,13 @@ def exercise2a():
     To do so, you will have to keep the muscle at a constant length and
     observe the force while stimulating the muscle at a constant activation."""
 
+    font1 = {'family' : 'normal',
+        'weight' : 'bold',
+        'size'   : 18}
+    font2 = {'family' : 'normal',
+        'weight' : 'normal',
+        'size'   : 12}
+    
     # Definition of muscles
     parameters = MuscleParameters()
     biolog.warning("Loading default muscle parameters")
@@ -252,6 +260,7 @@ def exercise2a():
     isoM = isometric_contraction(muscle)
     legend1 = ("Passive Force","Active Force", "Total Force")
     plt.figure('Forces vs Length')
+    plt.title("Force-Length relationship")
     plt.plot(isoM[0],isoM[1])
     plt.plot(isoM[0],isoM[2])
     plt.plot(isoM[0],isoM[3])
@@ -315,7 +324,7 @@ def exercise2a():
         #print("Activation = {} [s]".format(a))
         iso = isometric_contraction(muscle1, activation = a)
         #print("lapin \n {}".format(iso[2]))
-        legend2.append("Activation = {} [s]".format(a))
+        legend2.append("Activation = {} [-]".format(a))
         plt.plot(iso[0],iso[2]) # plot for active force
 #        plt.plot(iso[0],iso[3]) # plot for total force
         max_F_Diff[i]=np.abs(np.max(iso[1])-np.max(iso[2]))
@@ -388,6 +397,7 @@ def exercise2b():
     isoK = isotonic_contraction(muscle)
     plt.figure("Plot of Force vs Velocity")
     plt.plot(isoK[0], isoK[1])
+    plt.plot(isoK[0], isoK[1], 'o', markersize = 5)
     
     # Point 2f. Different muscle activation values.
 
