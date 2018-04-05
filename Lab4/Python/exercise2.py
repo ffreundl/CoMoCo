@@ -209,7 +209,7 @@ def isotonic_contraction(muscle, load=np.arange(1., 330., 10),
     for k,l in enumerate(load):
         mass_parameters.mass = l # Set the mass applied on the muscle
         state = np.copy(x0) # reset the state for next iteration
-#        print("The current load is: {}\n\n{}\n\n".format(mass_parameters.mass, "pump-it"))
+        print("The current load is: {}\n\n{}\n\n".format(mass_parameters.mass, "pump-it"))
         for t in timecharge:
             effect=muscle_integrate(muscle, state[0], activation, dt=dt)
 #            print(effect['activeForce'])
@@ -273,7 +273,7 @@ def exercise2a():
     # Stabilisation has been verified for integrating the muscle for 0.2s. However, to be sure, we integrated it for 0.25s
 #    plt.figure("Stab??")
 #    plt.plot(isoM[4],isoM[5]) 
-    
+   
     # Effect of varying l_opt (fiber length) NOT SURE)
     muscleS=Muscle.Muscle(parameters) # 'short' muscle 
     muscleS.l_opt=0.05 # short fiber length
@@ -311,6 +311,8 @@ def exercise2a():
     plt.grid(which='major', linestyle='-', linewidth='0.5', color='black')
     plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
     save_figure('short_vs_Long')
+    
+
     
     # Effect of varying activation (stimulation)
     activations = np.arange(0.0,1.05,0.05)
@@ -435,7 +437,7 @@ def exercise2b():
 
 def exercise2():
     """ Exercise 2 """
-    exercise2a()
+#    exercise2a()
     exercise2b()
 
 
