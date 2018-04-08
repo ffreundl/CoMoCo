@@ -32,7 +32,7 @@ def pendulum_equation(theta, dtheta, parameters=PendulumParameters()):
         parameters.b1,
         parameters.b2
     )
-    dampers=True
+    dampers=False
     if dampers == False:
         # 1a to 1c
         return (-g/L)*(np.sin(theta)) + k1*(s_theta_ref1 - theta)*np.heaviside(- s_theta_ref1 + theta,0.5) + k2*(s_theta_ref2 - theta)*np.heaviside(s_theta_ref2 - theta,0.5) # returns theta-point-point, which is integrated afterwards

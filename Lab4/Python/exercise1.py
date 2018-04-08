@@ -28,22 +28,28 @@ def exercise1():
 
     # Simulation Parameters
     t_start = 0.0
-    t_stop = 2.0
+    t_stop = 10.0
     dt = 0.001
     biolog.warning("Using large time step dt={}".format(dt))
-    time = np.arange(t_start, t_stop, dt)
-    x0 = [np.pi/2., 0.0] # x0[0] = initial position in rad, x0[1] = initial velocity
-
-    res = integrate(pendulum_integration, x0, time, args=(parameters,))
+    time0 = np.arange(t_start, t_stop/2., dt)
+    x0 = [np.pi/2., 0.3] # x0[0] = initial position in rad, x0[1] = initial velocity
     
-    res.plot_phase("Phase")
-    res.plot_state("State")
+    time1 = np.arange(t_stop/2., t_stop, dt)
+    x1= [1.0, 0.7] # x0[0] = initial position in rad, x0[1] = initial velocity
 
+    res0 = integrate(pendulum_integration, x0, time0, args=(parameters,))
+    res1 = integrate(pendulum_integration, x1, time1, args=(parameters,))
+    
+    res0.plot_phase("Phase")
+    res1.plot_phase("Phase")
+    res0.plot_state("State")
+    res1.plot_state("State")
+    
     if DEFAULT["save_figures"] is False:
         plt.show()
         font = {'family':'normal', 'weight':'normal', 'size':16}
         plt.rc('font', **font)
-        plt.title(" Init_Pos = $\pi/2$, Init_Vel = {}, K1 = {}, K2 = {},\ntheta_ref_1 = {}, theta_ref_2 = {}, B1 = {}, B2 = {}".format(x0[1], parameters.k1,parameters.k2,parameters.s_theta_ref1,parameters.s_theta_ref2, parameters.b1, parameters.b2))
+        plt.title(" Init_Pos_0 = $\pi/2$, Init_Vel_0 = {}, Init_Pos_1 = {}, Init_Vel_1 = {},\nK1 = {}, K2 = {}, theta_ref_1 = {}, theta_ref_2 = {}".format(x0[1], x1[0], x1[1], parameters.k1,parameters.k2,parameters.s_theta_ref1,parameters.s_theta_ref2))
         plt.minorticks_on()
         plt.grid(which='major', linestyle='-', linewidth='0.5', color='black')
         plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
