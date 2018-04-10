@@ -43,7 +43,7 @@ def exercise3():
     # Check Pendulum.py for more details on Pendulum class
     P_params = PendulumParameters()  # Instantiate pendulum parameters
     P_params.L = 0.5  # To change the default length of the pendulum
-    P_params.mass = 1.  # To change the default mass of the pendulum
+    P_params.mass = 10.  # To change the default mass of the pendulum
     pendulum = Pendulum(P_params)  # Instantiate Pendulum object
 
     #### CHECK OUT PendulumSystem.py to ADD PERTURBATIONS TO THE MODEL #####
@@ -83,7 +83,7 @@ def exercise3():
     sys.add_muscle_system(muscles)  # Add the muscle model to the system
 
     ##### Time #####
-    t_max = 5.  # Maximum simulation time
+    t_max = 3.  # Maximum simulation time
     time = np.arange(0., t_max, 0.01)  # Time vector
 
     ##### Model Initial Conditions #####
