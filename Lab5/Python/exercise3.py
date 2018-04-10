@@ -46,7 +46,7 @@ def exercise3():
     P_params.mass = 1.  # To change the default mass of the pendulum
     pendulum = Pendulum(P_params)  # Instantiate Pendulum object
 
-    #### CHECK OUT Pendulum.py to ADD PERTURBATIONS TO THE MODEL #####
+    #### CHECK OUT PendulumSystem.py to ADD PERTURBATIONS TO THE MODEL #####
 
     biolog.info('Pendulum model initialized \n {}'.format(
         pendulum.parameters.showParameters()))
@@ -84,10 +84,10 @@ def exercise3():
 
     ##### Time #####
     t_max = 1.  # Maximum simulation time
-    time = np.arange(0., t_max, 0.001)  # Time vector
+    time = np.arange(0., t_max, 0.0001)  # Time vector
 
     ##### Model Initial Conditions #####
-    x0_P = np.array([0.0, 0.])  # Pendulum initial condition
+    x0_P = np.array([np.pi/6., 0.])  # Pendulum initial condition
 
     # Muscle Model initial condition
     x0_M = np.array([0., M1.l_CE, 0., M2.l_CE])
@@ -109,7 +109,7 @@ def exercise3():
     act2 = np.ones((len(time), 1)) * 0.05
 
     activations = np.hstack((act1, act2))
-
+    print(activations)
     # Method to add the muscle activations to the simulation
 
     sim.add_muscle_activations(activations)

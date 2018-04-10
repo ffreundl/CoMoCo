@@ -36,6 +36,9 @@ class Pendulum(object):
             Return the current Acceleration and Velocity of the pendulum"""
 
         # YOU CAN ADD PERTURBATIONS TO THE PENDULUM MODEL HERE
+        
+        if time == 0.05:
+            
 
         # External torque applied to the pendulum
         torque = args[0]
@@ -106,7 +109,7 @@ def pendulum_equation(theta, dtheta, torque, parameters):
         parameters.mass,
         parameters.I
     )
-    return 0
+    return -(mass*g*L*sin(theta))/I + torque/I
 
 
 def pendulum_system(theta, dtheta, torque, parameters):
