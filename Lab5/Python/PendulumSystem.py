@@ -38,6 +38,7 @@ class Pendulum(object):
         # YOU CAN ADD PERTURBATIONS TO THE PENDULUM MODEL HERE
         
         if time == 0.05:
+            state[1]=-1.0
             
 
         # External torque applied to the pendulum
