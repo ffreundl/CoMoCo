@@ -83,9 +83,14 @@ def exercise3():
     sys.add_muscle_system(muscles)  # Add the muscle model to the system
 
     ##### Time #####
+<<<<<<< HEAD
     dt=0.01
     t_max = 500.  # Maximum simulation time
     time = np.arange(0., t_max, dt)  # Time vector
+=======
+    t_max = 3.  # Maximum simulation time
+    time = np.arange(0., t_max, 0.01)  # Time vector
+>>>>>>> 121bf48f9ee5f9d30094113cfd1e5af31eb8a7a4
 
     ##### Model Initial Conditions #####
     x0_P = np.array([.5,0.])  # Pendulum initial condition
