@@ -83,8 +83,8 @@ def exercise3():
     sys.add_muscle_system(muscles)  # Add the muscle model to the system
 
     ##### Time #####
-    t_max = 1.  # Maximum simulation time
-    time = np.arange(0., t_max, 0.0001)  # Time vector
+    t_max = 5.  # Maximum simulation time
+    time = np.arange(0., t_max, 0.01)  # Time vector
 
     ##### Model Initial Conditions #####
     x0_P = np.array([np.pi/6., 0.])  # Pendulum initial condition
@@ -105,8 +105,8 @@ def exercise3():
     # Here you can define your muscle activation vectors
     # that are time dependent
 
-    act1 = np.ones((len(time), 1)) * 0.05
-    act2 = np.ones((len(time), 1)) * 0.05
+    act1 = np.ones((len(time), 1)) * 0.005
+    act2 = np.ones((len(time), 1)) * 0.005
 
     activations = np.hstack((act1, act2))
     print(activations)
