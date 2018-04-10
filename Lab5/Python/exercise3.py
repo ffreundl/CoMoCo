@@ -43,7 +43,7 @@ def exercise3():
     # Check Pendulum.py for more details on Pendulum class
     P_params = PendulumParameters()  # Instantiate pendulum parameters
     P_params.L = 0.5  # To change the default length of the pendulum
-    P_params.mass = 1.  # To change the default mass of the pendulum
+    P_params.mass = 10.  # To change the default mass of the pendulum
     pendulum = Pendulum(P_params)  # Instantiate Pendulum object
 
     #### CHECK OUT PendulumSystem.py to ADD PERTURBATIONS TO THE MODEL #####
@@ -83,11 +83,12 @@ def exercise3():
     sys.add_muscle_system(muscles)  # Add the muscle model to the system
 
     ##### Time #####
-    t_max = 5.  # Maximum simulation time
-    time = np.arange(0., t_max, 0.01)  # Time vector
+    dt=0.01
+    t_max = 500.  # Maximum simulation time
+    time = np.arange(0., t_max, dt)  # Time vector
 
     ##### Model Initial Conditions #####
-    x0_P = np.array([np.pi/6., 0.])  # Pendulum initial condition
+    x0_P = np.array([.5,0.])  # Pendulum initial condition
 
     # Muscle Model initial condition
     x0_M = np.array([0., M1.l_CE, 0., M2.l_CE])
@@ -105,11 +106,23 @@ def exercise3():
     # Here you can define your muscle activation vectors
     # that are time dependent
 
-    act1 = np.ones((len(time), 1)) * 0.005
-    act2 = np.ones((len(time), 1)) * 0.005
+    act1 = np.arange(0.,t_max,dt)
+    act2 = np.arange(0.,t_max,dt) 
+
+    print((act2).shape)
+    
+    act1=(np.sin(2.*np.pi/t_max*500.*act1)+1.)*.5
+    act2=(-np.sin(2.*np.pi/t_max*500.*act2)+1.)*.5
+    act1=act1.reshape(len(act1),1)
+    act2=act2.reshape(len(act2),1)
+    
+    
+#    act1=np.ones((len(time),1))*0.0
+#    act2=np.ones((len(time),1))*0.0
 
     activations = np.hstack((act1, act2))
     print(activations)
+    print(act1.shape)
     # Method to add the muscle activations to the simulation
 
     sim.add_muscle_activations(activations)
