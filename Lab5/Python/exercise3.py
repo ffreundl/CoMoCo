@@ -150,12 +150,16 @@ def exercise3():
             # Check SystemSimulation.py results_muscles() method for more information
             res_muscles = sim.results_muscles()
             length1 = np.array(map(lambda x: np.sqrt(o1**2. + j**2. + 2.*o1*j*np.sin(x)), res[:,1])) # muscle 1 length
-            # moment arm of muscle 1 calculation
+            length2 = np.array(map(lambda x: np.sqrt(o2**2. + j**2. + 2.*o2*j*np.sin(x)), res[:,1])) # muscle 2 length
+            # moment arm of muscles calculation
             h1lambda = np.array(map(lambda x: np.abs(o1)*np.abs(j)*np.cos(x), res[:,1]))
+            h2lambda = np.array(map(lambda x: np.abs(o2)*np.abs(j)*np.cos(x), res[:,1]))
             h1 = h1lambda/length1
+            h2 = h2lambda/length2
             # Plotting the result for the current origins
             ax1.plot(res[:, 1], length1)
             ax2.plot(res[:, 1], h1)
+#            ax2.plot(res[:, 1], h2)
         
         ax1.legend(legendsertion)
         ax2.legend(legendsertion)
@@ -169,7 +173,7 @@ def exercise3():
 ####################################### End OF 3a ########################################  
 
     # Reset the mass to a more normal range
-    P_params.mass = 15. 
+    P_params.mass = 10. 
     
     # Define Muscle Attachment points
     m1_origin = np.array([-0.05, 0.0])  # Origin of Muscle 1
