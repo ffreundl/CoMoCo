@@ -81,6 +81,7 @@ def exercise4():
                    np.array([m2_origin, m2_insertion]))
 
     ##### Neural Network #####
+    
     # The network consists of four neurons
     N_params = NetworkParameters()  # Instantiate default network parameters
     N_params.D = 1.  # To change a network parameter
@@ -89,6 +90,9 @@ def exercise4():
               [-5.,0.,.0,-5.0],
               [3.0,-1.0,.0,.0],
               [-1.0,3.,.0,.0]]
+    
+    N_params.b=[3.0,3.0,-3.0,-3.]
+    N_params.tau=[.02,.02,.1,.1]
     biolog.info(N_params.showParameters())
 
     # Create a new neural network with above parameters
@@ -125,7 +129,7 @@ def exercise4():
 
     # Add external inputs to neural network
 
-    # sim.add_external_inputs_to_network(np.ones((len(time), 4)))
+#    sim.add_external_inputs_to_network(np.ones((len(time), 4)))
     # sim.add_external_inputs_to_network(ext_in)
 
     sim.initalize_system(x0, time)  # Initialize the system state
@@ -165,6 +169,25 @@ def exercise4():
     simulation = SystemAnimation(res, pendulum, muscles, neural_network)
     # To start the animation
     simulation.animate()
+    
+        # Plotting the results
+    plt.figure('Time&Phase')
+    plt.subplot(2,1,1)
+    plt.plot(res[:,0],res[:,1])
+#    plt.xlabel('Time [s]')
+    plt.grid()
+    plt.ylabel('Pos. [rad]')
+    plt.title('Position')
+    plt.subplot(2,1,2)
+    plt.title('Velocity')
+    plt.plot(res[:,0],res[:,2])
+    plt.xlabel('Time [s]')
+    plt.ylabel('Vel [rad/s]')
+    plt.grid()
+    plt.show()
+    
+    
+
 
 
 if __name__ == '__main__':
