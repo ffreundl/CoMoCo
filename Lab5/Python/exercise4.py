@@ -85,6 +85,11 @@ def exercise4():
     N_params = NetworkParameters()  # Instantiate default network parameters
     N_params.D = 1.  # To change a network parameter
     # Similarly to change w -> N_params.w = (4x4) array
+    N_params.w=[[.0,-5.,-5.0,0.],
+              [-5.,0.,.0,-5.0],
+              [3.0,-1.0,.0,.0],
+              [-1.0,3.,.0,.0]]
+    biolog.info(N_params.showParameters())
 
     # Create a new neural network with above parameters
     neural_network = NeuralSystem(N_params)
@@ -98,11 +103,11 @@ def exercise4():
     sys.add_neural_system(neural_network)
 
     ##### Time #####
-    t_max = 1.  # Maximum simulation time
+    t_max = 10.  # Maximum simulation time
     time = np.arange(0., t_max, 0.001)  # Time vector
 
     ##### Model Initial Conditions #####
-    x0_P = np.array([np.pi / 4., 0.])  # Pendulum initial condition
+    x0_P = np.array([0., 0.])  # Pendulum initial condition
 
     # Muscle Model initial condition
     x0_M = np.array([0., M1.l_CE, 0., M2.l_CE])

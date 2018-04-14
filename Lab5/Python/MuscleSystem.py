@@ -137,7 +137,7 @@ class MuscleSytem(object):
             rotMatrix(angle), self.muscle1_pos[1, :])])
 
         pos2 = np.array([self.muscle2_pos[0, :], np.dot(
-            rotMatrix(angle), self.muscle1_pos[1, :])])
+            rotMatrix(angle), self.muscle2_pos[1, :])])
 
         return np.concatenate(([pos1], [pos2]))
 
