@@ -107,7 +107,7 @@ def exercise4():
     sys.add_neural_system(neural_network)
 
     ##### Time #####
-    t_max = 10.  # Maximum simulation time
+    t_max = 20.  # Maximum simulation time
     time = np.arange(0., t_max, 0.001)  # Time vector
 
     ##### Model Initial Conditions #####
@@ -128,8 +128,14 @@ def exercise4():
     sim = SystemSimulation(sys)  # Instantiate Simulation object
 
     # Add external inputs to neural network
-
-#    sim.add_external_inputs_to_network(np.ones((len(time), 4)))
+    heaviside=np.heaviside(time - np.mean(time),0.5)
+    h4=np.zeros((len(time),4))
+    
+    h4[:,0]=heaviside
+    h4[:,1]=heaviside
+    h4[:,2]=heaviside
+    h4[:,3]=heaviside
+    sim.add_external_inputs_to_network(h4) # Activates the external drive to its max (1)
     # sim.add_external_inputs_to_network(ext_in)
 
     sim.initalize_system(x0, time)  # Initialize the system state
@@ -148,10 +154,10 @@ def exercise4():
 
     # Plotting the results
     plt.figure('Pendulum')
-    plt.title('Pendulum Phase')
+    plt.title('Pendulum Phase',fontsize = '18')
     plt.plot(res[:, 1], res[:, 2])
-    plt.xlabel('Position [rad]')
-    plt.ylabel('Velocity [rad.s]')
+    plt.xlabel('Position [rad]',fontsize = '16')
+    plt.ylabel('Velocity [rad/s]', fontsize = '16')
     plt.grid()
 
     if DEFAULT["save_figures"] is False:
@@ -171,18 +177,18 @@ def exercise4():
     simulation.animate()
     
         # Plotting the results
-    plt.figure('Time&Phase')
+    plt.figure('Time & Phase')
     plt.subplot(2,1,1)
     plt.plot(res[:,0],res[:,1])
 #    plt.xlabel('Time [s]')
     plt.grid()
-    plt.ylabel('Pos. [rad]')
-    plt.title('Position')
+    plt.ylabel('Pos. [rad]',fontsize = '16')
+    plt.title('Position',fontsize = '18')
     plt.subplot(2,1,2)
-    plt.title('Velocity')
+    plt.title('Velocity',fontsize = '18')
     plt.plot(res[:,0],res[:,2])
-    plt.xlabel('Time [s]')
-    plt.ylabel('Vel [rad/s]')
+    plt.xlabel('Time [s]',fontsize = '16')
+    plt.ylabel('Vel [rad/s]',fontsize = '16')
     plt.grid()
     plt.show()
     
