@@ -245,7 +245,7 @@ class Reflexes(object):
 
         # MUSCLE ACTIVATION CONSTANTS
         K1 = 0.2
-        K2 = 0.1
+        K2 = 0.001
 
         self.activations[side + 'H_M_PMA'] = 0.01
         self.activations[side + 'H_M_CF'] = K1
