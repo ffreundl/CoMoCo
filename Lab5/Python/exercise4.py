@@ -70,11 +70,11 @@ def exercise4():
         M2.parameters.showParameters()))
 
     # Define Muscle Attachment points
-    m1_origin = np.array([-0.17, 0.0])  # Origin of Muscle 1
+    m1_origin = np.array([-0.10, 0.0])  # Origin of Muscle 1
     m1_insertion = np.array([0.0, -0.17])  # Insertion of Muscle 1
 
     m2_origin = np.array([0.17, 0.0])  # Origin of Muscle 2
-    m2_insertion = np.array([0.0, -0.17])  # Insertion of Muscle 2
+    m2_insertion = np.array([0.0, -0.10])  # Insertion of Muscle 2
 
     # Attach the muscles
     muscles.attach(np.array([m1_origin, m1_insertion]),
