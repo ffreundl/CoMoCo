@@ -183,10 +183,10 @@ class Reflexes(object):
         # MUSCLE ACTIVATION CONSTANTS
         K1 = 0.5 #  CF: Must be active for stance, it allows not to fall by activating CF
         K2 = 0.4 #  CF: Used in case the mouse stands too straight and to the back
-        K3 = 1.
-        K4 = 0.5 # RF: Must be activated
-        K5 = 0.7 # SOL: Must be activated
-        K6 = 0.7 # LG: Must be activated
+        K3 = 1.0
+        K4 = 1.0 # RF: Must be activated
+        K5 = 1.0 # SOL: Must be activated
+        K6 = 1.0 # LG: Must be activated
         
 #        K1 = 1.
 #        K2 = 1.
@@ -219,9 +219,9 @@ class Reflexes(object):
         # TRANSITION TO SWING PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.3
-        K2 = 0.3
-        K3 = 0.2 # 0.4 before, see if stg changes
+        K1 = 0.8
+        K2 = 0.8
+        K3 = 0.8 # 0.4 before, see if stg changes
 
         self.activations[side + 'H_M_PMA'] = K1 + 0.01 * \
             (0.69813 - self.angles[side + 'H_J_KNEE'])
@@ -244,8 +244,8 @@ class Reflexes(object):
         # TRANSITION TO TOUCH_DOWN PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.7
-        K2 = 0.9 
+        K1 = 0.9
+        K2 = 0.8
 
         self.activations[side + 'H_M_PMA'] = 0.01
         self.activations[side + 'H_M_CF'] = K1
@@ -267,7 +267,7 @@ class Reflexes(object):
 
         # MUSCLE ACTIVATION CONSTANTS
         K1 = 0.6
-        K2 = 0.3
+        K2 = 0.9
 
         self.activations[side + 'H_M_PMA'] = K1
         self.activations[side + 'H_M_CF'] = 0.01
