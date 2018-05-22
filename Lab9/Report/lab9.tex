@@ -1,0 +1,203 @@
+\documentclass{cmc}
+\usepackage{multirow}
+
+\begin{document}
+
+\pagestyle{fancy}
+\lhead{\textit{\textbf{Computational Motor Control, Spring 2018} \\
+    Python exercise, Lab 9, BONUS ASSIGNMENT}} \rhead{Student \\
+  Names}
+
+\section*{Student names: \ldots (please update)}
+
+\textit{Instructions: The goal of this session is to get you
+  familiarized with the NeuroRobotics Platform (NRP) developed by the
+  Human Brain Project.  During the session you will work with the NRP
+  on two experiments. Namely, a pendulum model and a mouse model. You
+  will have to use the features in the platform to complete simple
+  tasks described below and provide solutions. Also you will be
+  answering questions regarding the usability and features of the
+  platform as you perform the experiments. \textbf{\corr{You only need
+      to submit a small report answering the questions described in
+      this below. The report should be no longer than 3 pages in
+      total}} Submit a single document
+  \corr{NRP\_report\_name1\_name2\_name3.zip} where name\# are the
+  team member’s last names.  \corr{Please submit only one report per
+    team!}}  \\ {\corr{ This assignment gives a 0.25 (if carried out
+    reasonably well) or 0.5 (if carried out very well) bonus point on
+    the grade for the mini project. For instance, your mini project
+    grade can be increased from 5.0 to 5.5. Deadline May 18, 23h55. }
+  \\
+
+  \section*{Pendulum Experiment}
+  \label{sec:pendulum-experiment}
+
+  This experiment contains the model of a simple pendulum actuated by
+  a pair of antagonist muscles. It is similar to the model you have
+  developed and worked with during \textit{Lab 4} and \textit{Lab
+    5}. The pendulum model is developed to replicate the behavior of
+  mouse hind limb femur and pelvis segments with a single degree of
+  freedom at the hip joint. Hence, the physical properties for the
+  pendulum model are extracted from the mouse data. Table
+  \ref{tab:pendulum_properties} describes the physical properties of
+  the pendulum used in the simulation. The model contains two muscles,
+  one on each side of the joint. The muscle and their functions on the
+  joint is described in \ref{tab:muscle_properties}. For properties of
+  the muscles you can have a look at the
+  \corr{pendulum\_properties.json} in the Experiment Files section on
+  the NRP.
+
+
+  \textit{Note : The physics of the model is scaled to avoid numerical
+  instabilities. Please refer to Lab 7 for more details on physics scaling}
+
+  \begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+      \hline		
+      \multirow{2}{*}{\textbf{Segment}} & \multirow{2}{*}{\textbf{{Mass}[$g$]}}
+      &    \multirow{2}{*}{\textbf{{Length }[$cm$]}} & \multicolumn{3}{|c|}{\textbf{{Moment of Inertia}}} \\
+                                        &          &        & \textbf{Ixx} [$g$ $cm^2$] & \textbf{Iyy} [$g$ $cm^2$] & \textbf{Izz}[$g$ $cm^2$] \\ \hline
+      Pendulum  & 1.11126 & 1 & 9.1                  & 4.24                  & 9.10                 \\ \hline
+    \end{tabular}
+    \caption{Physical Properties of the Pendulum}
+    \label{tab:pendulum_properties}
+  \end{table}
+
+	\begin{table}[H]
+          \centering
+          \begin{tabular}{|c|c|c|c|c|c|}
+            \hline
+            \textbf{Muscle}       & \textbf{Abbreviation} & \textbf{Type } & \textbf{Hip} & \textbf{Knee} & \textbf{Ankle} \\ \hline
+            Psoas Major           & PMA                   & Mono-articular & Flexion      & -             & -              \\ \hline
+            Caudofemoralis        & CF                    & Mono-articular & Extension    & -             & -              \\ \hline
+          \end{tabular}
+          \caption{Flexor and Extensor muscles in the pendulum model}
+          \label{tab:muscle_properties}
+	\end{table}
+        
+        \newpage
+        \subsection*{Questions}
+        \label{sec:questions}
+
+        Launch the pendulum model and open Editor function and then
+        navigate to the Transfer Functions tab. Here you will find the
+        three main python files that allow you to control and modify
+        the experiment.
+        \begin{itemize}
+        \item \textbf{\corr{apply\_torque.py}} : Transfer function to
+          apply the computed joint torques to the Gazebo simulation.
+        \item \textbf{\corr{compute\_muscle\_torque.py}} : Transfer
+          function to step the musculoskeletal model and compute the
+          joint torques.  This is the function you need to work with
+          to change the muscle activation patterns while answering the
+          questions.
+        \item \textbf{\corr{save\_csv\_joint\_state.py}} : Transfer
+          function to save the data to a csv file.
+        \end{itemize}
+        
+        \subsubsection*{1a. Briefly describe the behavior of the
+          pendulum with the default parameters, e.g. in terms of
+          frequency and amplitude of oscillations.  Plots are not
+          necessary.}
+        \label{sec:1a}
+
+        \subsubsection*{1b. Is the pendulum in a limit cycle behavior?
+          What feature from the NRP did you use to check the limit
+          cycle behavior?}
+
+        \subsubsection*{1c. In \corr{compute\_muscle\_torque.py}
+          change the muscle activation's frequency of the flexor and
+          extensor by the same factor. Does the pendulum frequency
+          correlate with the applied frequency of the muscle
+          activation's?}
+        \label{sec:1c}
+
+        \subsubsection*{1d. Download the csv data file from the
+          Experiment files folder at the end of a simulation. Read the
+          data externally using Python(For example with Spyder) or any
+          other program of your choice. Show a plot containing the
+          joint states (position and velocity) as a function of time
+          and phase plot containing joint position versus velocity}
+        \label{sec:1d}
+
+        \newpage
+
+        \section*{Mouse Experiment}
+      
+        \label{sec:mouse-experiment}
+
+        For the mini project you have been working on the mouse
+        locomotion based purely on reflexes and feed backs.  The
+        current mouse model(which is part of current research)
+        contains a bio-inspired Central Pattern Generator network
+        developed by [1]. The physical properties and the
+        musculoskeletal parameters of the model are the same as you
+        have seen for the mini project.
+
+        \subsection*{Questions}
+
+        \subsubsection*{2a. Clone the mouse model to run the
+          experiment. Translate the mouse model by -2 m in the world
+          before starting the simulation.Then start the simulation and
+          observe the behavior. Describe the gait generated by the
+          hind limbs with default parameters. Eg. in terms of duty
+          factor, and phase relationship between left and right legs}
+
+        \subsubsection*{2b. Is the mouse model behaving in a
+          qualitatively similar manner to the Webots model?. Briefly
+          discuss similarities and differences}
+
+        \subsubsection*{2c. What happens if the mouse model is started
+          in the air rather than on ground? Try different starting
+          heights, and briefly discuss}
+
+        \subsubsection*{2d. During the mouse locomotion, interactively
+          add objects into the simulation to create a perturbation and
+          explain how the model behaves in this case. No, need of any
+          plots. Provide a screen shot of the mouse with the inserted
+          objects.}
+
+        \subsubsection*{2e. Using the logged csv data plot the muscle
+          activation's of all the muscles in either left or right hind
+          limb by reading the csv file externally using Python or
+          other program of your choice. Briefly describe the muscle
+          activation pattern you observe in the plot. }
+      
+        \section*{Neuro-Robotics Platform}
+        \label{sec:nrp-feedb-quest}
+
+        \subsection*{Questions}
+        
+        \subsubsection*{3a. Do you like the idea of accessing the
+          neuromechanical models on remote servers through a web
+          interface?}
+
+        \subsubsection*{3b. How do you rate the graphical user
+          interface? Any suggestions on how to improve it?}
+
+        \subsubsection*{3c.How do you rate the programming
+          environment?  (Obviously there was little time to really
+          test it today). Any suggestions on how to improve it?}
+
+        \subsubsection*{3d. Please also complete the following online
+          feedback
+          \href{https://docs.google.com/forms/d/e/1FAIpQLSfmcBCIoLaNXOuNBGXvWdIbC453-T6F-mEafyHQbhINUy8IMw/viewform}{\corr{form}
+          }}
+
+        \section*{REFERENCES}
+        \label{sec:references}
+
+        1. \textit{Central control of inter limb coordination and
+          speed-dependent gait expression in quadrupeds.} : Danner,
+        S. M., Wilshin, S. D., Shevtsova, N. A. and Rybak,
+        I. A. (2016), J Physiol, 594: 6947-6967. doi:10.1113/JP272787
+        \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5134391/pdf/TJP-594-6947.pdf}{\corr{[link]}}}
+       
+    \end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

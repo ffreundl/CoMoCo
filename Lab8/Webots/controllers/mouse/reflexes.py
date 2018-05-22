@@ -41,10 +41,11 @@ class Reflexes(object):
         self.ground_contact = ground_contact
 
          #UNCOMMENT WHEN YOU HAVE TUNED ALL THE 4 PHASES
-         #LEFT LEG
-        self.state_transition('L')
+        
          #RIGHT LEG
         self.state_transition('R')
+          #LEFT LEG
+        self.state_transition('L')
 
         # UNCOMMENT TO TUNE STANCE PHASE
         #self.stance_2_lift_off('L')
