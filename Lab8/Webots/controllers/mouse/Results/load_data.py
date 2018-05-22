@@ -100,11 +100,85 @@ def main():
      muscle_rh_forces,
      joint_lh_positions,
      joint_rh_positions] = load_data()
+################################## 7c ###########################
+    
+    c = False
+    if c == True:
+        # Plot joint angles.
+        # Feel free to change or use your own plot tools
+        legends = ('Left','Right')
+        plt.figure('Joint Angles')
+        plt.subplot(3,1,1)
+        plt.title('Hip Joint Angle', fontsize='14')
+        plt.plot(time, np.rad2deg(joint_lh_positions[:, 0]))
+        plt.plot(time, np.rad2deg(joint_rh_positions[:, 0]))
+        plt.legend(legends)
+        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(3,1,2)
+        plt.title('Knee Joint Angle', fontsize='14')
+        plt.plot(time, np.rad2deg(joint_lh_positions[:, 1]))
+        plt.plot(time, np.rad2deg(joint_rh_positions[:, 1]))
+        plt.legend(legends)
+        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(3,1,3)
+        plt.title('Ankle Joint Angle', fontsize='14')
+        plt.plot(time, np.rad2deg(joint_lh_positions[:, 2]))
+        plt.plot(time, np.rad2deg(joint_rh_positions[:, 2]))
+        plt.legend(legends)
+        plt.grid('on')
+        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.xlabel('Time [s]', fontsize = '14')
+        
+        # Plot muscles activations for left hind limb.
+        plt.figure('Muscle Activations for Left Hind Limb (values between 0 and 1)')
+        plt.subplot(8,1,1)
+        plt.plot(time, muscle_lh_activations[:, 0])
+        plt.grid('on')
+        plt.ylabel('PMA', fontsize = '14')
+        plt.subplot(8,1,2)
+        plt.plot(time, muscle_lh_activations[:, 1])
+        plt.grid('on')
+        plt.ylabel('CF', fontsize = '14')
+        plt.subplot(8,1,3)
+        plt.plot(time, muscle_lh_activations[:, 2])
+        plt.ylabel('SM', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(8,1,4)
+        plt.plot(time, muscle_lh_activations[:, 3])
+        plt.ylabel('POP', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(8,1,5)
+        plt.plot(time, muscle_lh_activations[:, 4])
+        plt.ylabel('RF', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(8,1,6)
+        plt.plot(time, muscle_lh_activations[:, 5])
+        plt.ylabel('TA' , fontsize = '14')
+        plt.grid('on')
+        plt.subplot(8,1,7)
+        plt.plot(time, muscle_lh_activations[:, 6])
+        plt.ylabel('SOL', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(8,1,8)
+        plt.plot(time, muscle_lh_activations[:, 7])
+        plt.ylabel('LG', fontsize = '14')
+        plt.grid('on')
+        plt.xlabel('Time [s]', fontsize = '14')
+    
+        # Plot the ground contact of gait cycle
+        contact_data = np.hstack((foot_r_contact, foot_l_contact))
+        print(foot_l_contact)
+        plot_gait(time, contact_data,  0.01)
+        plt.show()
 
-    # Plot joint angles.
+
+############################ 7d ##################################  
+ # Plot joint angles.
     # Feel free to change or use your own plot tools
     legends = ('Left','Right')
-    plt.figure('Joint Angles')
+    plt.figure('Joint Angles for Uncoupling at simulation time = 1.0')
     plt.subplot(3,1,1)
     plt.title('Hip Joint Angle', fontsize='14')
     plt.plot(time, np.rad2deg(joint_lh_positions[:, 0]))
@@ -126,49 +200,7 @@ def main():
     plt.legend(legends)
     plt.grid('on')
     plt.ylabel('Angle [deg]', fontsize = '14')
-    plt.xlabel('Time [s]', fontsize = '14')
-    
-    # Plot muscles activations for left hind limb.
-    plt.figure('Muscle Activations for Left Hind Limb (values between 0 and 1)')
-    plt.subplot(8,1,1)
-    plt.plot(time, muscle_lh_activations[:, 0])
-    plt.grid('on')
-    plt.ylabel('PMA', fontsize = '14')
-    plt.subplot(8,1,2)
-    plt.plot(time, muscle_lh_activations[:, 1])
-    plt.grid('on')
-    plt.ylabel('CF', fontsize = '14')
-    plt.subplot(8,1,3)
-    plt.plot(time, muscle_lh_activations[:, 2])
-    plt.ylabel('SM', fontsize = '14')
-    plt.grid('on')
-    plt.subplot(8,1,4)
-    plt.plot(time, muscle_lh_activations[:, 3])
-    plt.ylabel('POP', fontsize = '14')
-    plt.grid('on')
-    plt.subplot(8,1,5)
-    plt.plot(time, muscle_lh_activations[:, 4])
-    plt.ylabel('RF', fontsize = '14')
-    plt.grid('on')
-    plt.subplot(8,1,6)
-    plt.plot(time, muscle_lh_activations[:, 5])
-    plt.ylabel('TA' , fontsize = '14')
-    plt.grid('on')
-    plt.subplot(8,1,7)
-    plt.plot(time, muscle_lh_activations[:, 6])
-    plt.ylabel('SOL', fontsize = '14')
-    plt.grid('on')
-    plt.subplot(8,1,8)
-    plt.plot(time, muscle_lh_activations[:, 7])
-    plt.ylabel('LG', fontsize = '14')
-    plt.grid('on')
-    plt.xlabel('Time [s]', fontsize = '14')
-
-    # Plot the ground contact of gait cycle
-    contact_data = np.hstack((foot_r_contact, foot_l_contact))
-    print(foot_l_contact)
-    plot_gait(time, contact_data,  0.01)
-    plt.show()
+    plt.xlabel('Time [s]', fontsize = '14')    
 
     return
 

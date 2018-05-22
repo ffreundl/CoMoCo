@@ -1,21 +1,33 @@
 """This file implements the reflexes based on the rules defined by Ekeberg."""
 
+import numpy as np
+
 
 class Reflexes(object):
     """ Class to describe the reflexes for locomotion. """
 
     def __init__(self, muscle_names):
         super(Reflexes, self).__init__()
+
+        # Internal parameters
+        self._COUPLING = None
+        self._HIP_EXTENSION_RULE = None
+        self._ANKLE_UNLOADING_RULE = None
+
         # Attributes
         self.muscle_names = muscle_names
         self.activations = {}
         self.leg_curr_phase = {'L': 'TOUCH_DOWN', 'R': 'LIFT_OFF'}
         self.leg_prev_phase = {'L': 'SWING', 'R': 'STANCE'}
-        self.cross_coupling = True
         self.side = None
         self.angles = None
         self.ground_contact = None
         self.forces = {}
+
+        # REFLEX CONDITIONS TO BE STUDIED
+        self.COUPLING = True
+        self.HIP_EXTENSION_RULE = True
+        self.ANKLE_UNLOADING_RULE = True
 
         # Initialize activation dictionary
         for name in self.muscle_names:
@@ -40,28 +52,27 @@ class Reflexes(object):
         # Update ground contact
         self.ground_contact = ground_contact
 
-         #UNCOMMENT WHEN YOU HAVE TUNED ALL THE 4 PHASES
-        
-         #RIGHT LEG
-        self.state_transition('R')
-          #LEFT LEG
+        # UNCOMMENT WHEN YOU HAVE TUNED ALL THE 4 PHASES
+        # LEFT LEG
         self.state_transition('L')
+        # RIGHT LEG
+        self.state_transition('R')
 
-        # UNCOMMENT TO TUNE STANCE PHASE
-        #self.stance_2_lift_off('L')
-        #self.stance_2_lift_off('R')
+        # # UNCOMMENT TO TUNE STANCE PHASE
+        # self.stance_2_lift_off('L')
+        # self.stance_2_lift_off('R')
 
-         #UNCOMMENT TO TUNE LIFT_OFF PHASE
-        #self.lift_off_2_swing('L')
-        #self.lift_off_2_swing('R')
+        # # UNCOMMENT TO TUNE LIFT_OFF PHASE
+        # self.lift_off_2_swing('L')
+        # self.lift_off_2_swing('R')
 
-         #UNCOMMENT TO TUNE SWING PHASE
-        #self.swing_2_touch_down('L')
-        #self.swing_2_touch_down('R')
+        # # UNCOMMENT TO TUNE SWING PHASE
+        # self.swing_2_touch_down('L')
+        # self.swing_2_touch_down('R')
 
-        # UNCOMMENT TO TUNE TOUCH_DOWN PHASE
-        #self.touch_down_2_stance('L')
-        #self.touch_down_2_stance('R')
+        # # UNCOMMENT TO TUNE TOUCH_DOWN PHASE
+        # self.touch_down_2_stance('L')
+        # self.touch_down_2_stance('R')
 
         return self.activations
 
@@ -92,19 +103,37 @@ class Reflexes(object):
         side: string
             String describing left or right hind limb
         """
-
-        # To make sure both legs do not take off at the same time
-        contra_side = self.contra_lateral_side(side)
-
         # PARAMETERS TO BE TUNED FOR UNLOADING/HIP ANGLE REFLEXES
         # EXECUTION OF LIFT_OFF PHASE
-        HIP_ANGLE_LIFTOFF = -0.1235
-        ANKLE_UNLOADING_LIFTOFF = 0.8
+        HIP_ANGLE_LIFTOFF = -0.123
+        ANKLE_UNLOADING_LIFTOFF = 0.25
 
         # PARAMETERS TO BE TUNED FOR HIP/KNEE ANGLE REFLEXES
         # EXECUTION OF TOUCH_DOWN PHASE
         HIP_ANGLE_TOUCHDOWN = 0.4
-        ANKLE_UNLOADING_TOUCHDOWN = -1.25
+        KNEE_ANGLE_TOUCHDOWN = -1.25
+
+        # COUPLING BETWEEN THE LEGS
+        if self.COUPLING:
+            # To make sure both legs do not take off at the same time
+            contra_side = self.contra_lateral_side(side)
+            contra_lateral_state = self.leg_curr_phase[contra_side] == 'STANCE'
+        elif not self.COUPLING:
+            contra_lateral_state = True
+
+        # HIP EXTENSION RULE
+        if self.HIP_EXTENSION_RULE:
+            hip_extension_state = (
+                self.angles[side + 'H_J_HIP'] < HIP_ANGLE_LIFTOFF)
+        elif not self.HIP_EXTENSION_RULE:
+            hip_extension_state = True
+
+        # ANKLE UNLOADING RULE
+        if self.ANKLE_UNLOADING_RULE:
+            ankle_unloading_state = (
+                self.forces[side + 'H_M_SOL'] < ANKLE_UNLOADING_LIFTOFF)
+        elif not self.ANKLE_UNLOADING_RULE:
+            ankle_unloading_state = True
 
         # EXECUTE STANCE PHASE AFTER GROUND CONTACT
         if (self.ground_contact[side]) and (
@@ -116,11 +145,11 @@ class Reflexes(object):
         # EXECUTE LIFT_OFF PHASE WITH HIP ANGLE AND ANKLE UNLOADING REFLEXES
         # SET THE REFLEX CONDITIONS FOR HIP ANGLE AND ANKLE UNLOADING FORCE
 
-        elif (self.angles[side + 'H_J_HIP'] < HIP_ANGLE_LIFTOFF) and (
-                self.forces[side + 'H_M_SOL'] < ANKLE_UNLOADING_LIFTOFF) and (
+        elif (hip_extension_state) and (
+                ankle_unloading_state) and (
                     self.leg_curr_phase[side] == 'STANCE') and (
-                        self.leg_prev_phase[side] == 'TOUCH_DOWN') and (
-                            self.leg_curr_phase[contra_side] == 'STANCE'):
+            self.leg_prev_phase[side] == 'TOUCH_DOWN') and(
+                    contra_lateral_state):
             self.leg_curr_phase[side] = 'LIFT_OFF'
             self.leg_prev_phase[side] = 'STANCE'
 
@@ -129,22 +158,15 @@ class Reflexes(object):
         elif (not self.ground_contact[side]) and (
                 self.leg_curr_phase[side] == 'LIFT_OFF') and (
                     self.leg_prev_phase[side] == 'STANCE'):
-
             self.leg_curr_phase[side] = 'SWING'
             self.leg_prev_phase[side] = 'LIFT_OFF'
 
         # EXECUTE TOUCH_DOWN PHASE AFTER HIP AND KNEE ANGLE REFLEXES
-        # SET THE REFLEX CONDITIONS FOR HIP ANGLE AND ANKLE UNLOADING FORCE
 
-        elif (
-                self.angles[side + 'H_J_HIP'] > HIP_ANGLE_TOUCHDOWN
-        ) and (
-            self.angles[side + 'H_J_KNEE'] < ANKLE_UNLOADING_TOUCHDOWN
-        ) and (
-            self.leg_curr_phase[side] == 'SWING'
-        ) and (
-            self.leg_prev_phase[side] == 'LIFT_OFF'
-        ):
+        elif (self.angles[side + 'H_J_HIP'] > HIP_ANGLE_TOUCHDOWN) and (
+                self.angles[side + 'H_J_KNEE'] < KNEE_ANGLE_TOUCHDOWN) and (
+                self.leg_curr_phase[side] == 'SWING') and (
+                self.leg_prev_phase[side] == 'LIFT_OFF'):
             self.leg_curr_phase[side] = 'TOUCH_DOWN'
             self.leg_prev_phase[side] = 'SWING'
 
@@ -175,10 +197,9 @@ class Reflexes(object):
     def stance_2_lift_off(self, side):
         """Transition from stance to lift-off.
         """
-
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION FROM STANCE PHASE
-
+        
         print("STANCE")
 
         # MUSCLE ACTIVATION CONSTANTS
@@ -279,3 +300,53 @@ class Reflexes(object):
         self.activations[side + 'H_M_SOL'] = 0.01
         self.activations[side + 'H_M_LG'] = 0.01
         return
+
+
+    # PROPERTIES
+    @property
+    def COUPLING(self):
+        """ Set the coupling between legs  """
+        return self._COUPLING
+
+    @COUPLING.setter
+    def COUPLING(self, value):
+        """
+        Parameters
+        ----------
+        value: bool
+            Set whether cross coupling between legs is active or not
+        """
+        print(('CHANGING COUPLING State to {}'.format(value)))
+        self._COUPLING = value
+
+    @property
+    def HIP_EXTENSION_RULE(self):
+        """ Return whether HIP EXTENSION RULE is active or not """
+        return self._HIP_EXTENSION_RULE
+
+    @HIP_EXTENSION_RULE.setter
+    def HIP_EXTENSION_RULE(self, value):
+        """
+        Parameters
+        ----------
+        value: bool
+            Set whether HIP EXTENSION RULE is active or not
+        """
+        print(('CHANGING HIP EXTENSION RULE state to {}'.format(value)))
+        self._HIP_EXTENSION_RULE = value
+
+    @property
+    def ANKLE_UNLOADING_RULE(self):
+        """ Return whether ANKLE UNLOADING RULE is active or not """
+        return self._ANKLE_UNLOADING_RULE
+
+    @ANKLE_UNLOADING_RULE.setter
+    def ANKLE_UNLOADING_RULE(self, value):
+        """
+        Parameters
+        ----------
+        value: bool
+            Set whether ANKLE UNLOADING RULE is active or not
+        """
+        print(('CHANGING ANKLE EXTENSION RULE state to {}'.format(value)))
+        self._ANKLE_UNLOADING_RULE = value
