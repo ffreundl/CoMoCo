@@ -183,7 +183,7 @@ class Reflexes(object):
 
         # MUSCLE ACTIVATION CONSTANTS
         K1 = 0.5 #  CF: Must be active for stance, it allows not to fall by activating CF
-        K2 = 0.4 #  CF: Used in case the mouse stands too straight and to the back
+        K2 = 0.8 #  CF: changed from 0.4 used in case the mouse stands too straight and to the back
         K3 = 1.0
         K4 = 1.0 # RF: Must be activated
         K5 = 1.0 # SOL: Must be activated
