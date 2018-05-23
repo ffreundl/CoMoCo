@@ -266,7 +266,7 @@ class Reflexes(object):
         # TRANSITION TO TOUCH_DOWN PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.9
+        K1 = 0.8
         K2 = 0.8
 
         self.activations[side + 'H_M_PMA'] = 0.01

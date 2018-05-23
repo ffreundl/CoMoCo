@@ -102,7 +102,7 @@ def main():
      joint_rh_positions] = load_data()
 ################################## 7c ###########################
     
-    c = False
+    c = True
     if c == True:
         # Plot joint angles.
         # Feel free to change or use your own plot tools
@@ -175,32 +175,33 @@ def main():
 
 
 ############################ 7d ##################################  
- # Plot joint angles.
-    # Feel free to change or use your own plot tools
-    legends = ('Left','Right')
-    plt.figure('Joint Angles for Uncoupling at simulation time = 1.0')
-    plt.subplot(3,1,1)
-    plt.title('Hip Joint Angle', fontsize='14')
-    plt.plot(time, np.rad2deg(joint_lh_positions[:, 0]))
-    plt.plot(time, np.rad2deg(joint_rh_positions[:, 0]))
-    plt.legend(legends)
-    plt.ylabel('Angle [deg]', fontsize = '14')
-    plt.grid('on')
-    plt.subplot(3,1,2)
-    plt.title('Knee Joint Angle', fontsize='14')
-    plt.plot(time, np.rad2deg(joint_lh_positions[:, 1]))
-    plt.plot(time, np.rad2deg(joint_rh_positions[:, 1]))
-    plt.legend(legends)
-    plt.ylabel('Angle [deg]', fontsize = '14')
-    plt.grid('on')
-    plt.subplot(3,1,3)
-    plt.title('Ankle Joint Angle', fontsize='14')
-    plt.plot(time, np.rad2deg(joint_lh_positions[:, 2]))
-    plt.plot(time, np.rad2deg(joint_rh_positions[:, 2]))
-    plt.legend(legends)
-    plt.grid('on')
-    plt.ylabel('Angle [deg]', fontsize = '14')
-    plt.xlabel('Time [s]', fontsize = '14')    
+        
+        # Plot joint angles.
+        # Feel free to change or use your own plot tools
+        legends = ('Left','Right')
+        plt.figure('Joint Angles for Uncoupling at Simulation Time = 1.0')
+        plt.subplot(3,1,1)
+        plt.title('Hip Joint Angle', fontsize='14')
+        plt.plot(time, np.rad2deg(joint_lh_positions[:, 0]))
+        plt.plot(time, np.rad2deg(joint_rh_positions[:, 0]))
+        plt.legend(legends)
+        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(3,1,2)
+        plt.title('Knee Joint Angle', fontsize='14')
+        plt.plot(time, np.rad2deg(joint_lh_positions[:, 1]))
+        plt.plot(time, np.rad2deg(joint_rh_positions[:, 1]))
+        plt.legend(legends)
+        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.grid('on')
+        plt.subplot(3,1,3)
+        plt.title('Ankle Joint Angle', fontsize='14')
+        plt.plot(time, np.rad2deg(joint_lh_positions[:, 2]))
+        plt.plot(time, np.rad2deg(joint_rh_positions[:, 2]))
+        plt.legend(legends)
+        plt.grid('on')
+        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.xlabel('Time [s]', fontsize = '14')    
 
     return
 
