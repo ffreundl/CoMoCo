@@ -2,6 +2,8 @@
 
 import numpy as np
 
+from controller import Supervisor
+
 
 class Reflexes(object):
     """ Class to describe the reflexes for locomotion. """
@@ -105,8 +107,8 @@ class Reflexes(object):
         """
         # PARAMETERS TO BE TUNED FOR UNLOADING/HIP ANGLE REFLEXES
         # EXECUTION OF LIFT_OFF PHASE
-        HIP_ANGLE_LIFTOFF = -0.123
-        ANKLE_UNLOADING_LIFTOFF = 0.25
+        HIP_ANGLE_LIFTOFF = 0.123 #-0.123
+        ANKLE_UNLOADING_LIFTOFF = 0.25 #0.25
 
         # PARAMETERS TO BE TUNED FOR HIP/KNEE ANGLE REFLEXES
         # EXECUTION OF TOUCH_DOWN PHASE
