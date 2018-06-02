@@ -90,7 +90,7 @@ class Mouse(Supervisor):
 
         # TO ENABLE/DISABLE REFLEX STATE AT THE BEGINNING OF SIMULATION
         # DO IT HERE
-        reflex.COUPLING = True #(IT IS ENABLED BY DEFAULT)
+        reflex.COUPLING = False #(IT IS ENABLED BY DEFAULT)
        
         while self.step(self.TIMESTEP) != -1:
 
@@ -98,8 +98,9 @@ class Mouse(Supervisor):
             # DO IT HERE
 
             if (self.getTime() == 1.):
-                reflex.HIP_EXTENSION_RULE = True
-                reflex.ANKLE_UNLOADING_RULE = False
+                reflex.COUPLING = False
+                reflex.HIP_EXTENSION_RULE = False
+                reflex.ANKLE_UNLOADING_RULE = True
 
             # Reflex model
             reflex.step(

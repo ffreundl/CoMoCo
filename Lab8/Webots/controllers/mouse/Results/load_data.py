@@ -267,10 +267,10 @@ def main():
         
         
 ############################ 7f ##################################  
-    contact_data = np.hstack((foot_r_contact, foot_l_contact))
-    print(foot_l_contact)
-    plot_gait(time, contact_data,  0.01)
-    plt.show() 
+#    contact_data = np.hstack((foot_r_contact, foot_l_contact))
+#    print(foot_l_contact)
+#    plot_gait(time, contact_data,  0.01)
+#    plt.show() 
        
 ############################ 7g ##################################    
         # For Up or Down hill gait (just change the name in the plot figure title)
@@ -278,35 +278,35 @@ def main():
     if g == True:
         # Plot joint angles.
         # Feel free to change or use your own plot tools
-        plt.figure('Uphill ANKLE = True')
+        plt.figure('DOWNHILL BOTH = TRUE, ANKLE = 0.5, COUPLING = FALSE')
         plt.subplot(3,1,1)
-        plt.title('Hip Joint Angle', fontsize='14')
-        plt.plot(time, np.rad2deg(joint_lh_positions[:, 0]))
-        plt.plot(time, np.rad2deg(joint_rh_positions[:, 0]))
+        plt.title('X-Trajectory', fontsize='14')
+        plt.plot(time,ankle_l_trajectory [:, 0])
+        plt.plot(time,ankle_r_trajectory [:, 0])
         plt.legend(legends)
-        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.ylabel('X-Pos [m]', fontsize = '14')
         plt.grid('on')
         plt.subplot(3,1,2)
-        plt.title('Knee Joint Angle', fontsize='14')
-        plt.plot(time, np.rad2deg(joint_lh_positions[:, 1]))
-        plt.plot(time, np.rad2deg(joint_rh_positions[:, 1]))
+        plt.title('Y-Trajectory', fontsize='14')
+        plt.plot(time,ankle_l_trajectory [:, 1])
+        plt.plot(time, ankle_r_trajectory [:, 1])
         plt.legend(legends)
-        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.ylabel('Y-Pos [m]', fontsize = '14')
         plt.grid('on')
         plt.subplot(3,1,3)
-        plt.title('Ankle Joint Angle', fontsize='14')
-        plt.plot(time, np.rad2deg(joint_lh_positions[:, 2]))
-        plt.plot(time, np.rad2deg(joint_rh_positions[:, 2]))
+        plt.title('Z-Trajectory', fontsize='14')
+        plt.plot(time,ankle_l_trajectory [:, 2])
+        plt.plot(time, ankle_r_trajectory [:, 2])
         plt.legend(legends)
         plt.grid('on')
-        plt.ylabel('Angle [deg]', fontsize = '14')
+        plt.ylabel('Z-Pos [m]', fontsize = '14')
         plt.xlabel('Time [s]', fontsize = '14')    
 
-        # Plot the ground contact of gait cycle
-        contact_data = np.hstack((foot_r_contact, foot_l_contact))
-        print(foot_l_contact)
-        plot_gait(time, contact_data,  0.01)
-        plt.show()
+#        # Plot the ground contact of gait cycle
+#        contact_data = np.hstack((foot_r_contact, foot_l_contact))
+#        print(foot_l_contact)
+#        plot_gait(time, contact_data,  0.01)
+#        plt.show()
         
         
         

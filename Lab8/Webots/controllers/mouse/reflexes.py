@@ -107,7 +107,7 @@ class Reflexes(object):
         """
         # PARAMETERS TO BE TUNED FOR UNLOADING/HIP ANGLE REFLEXES
         # EXECUTION OF LIFT_OFF PHASE
-        HIP_ANGLE_LIFTOFF = 0.123 #-0.123
+        HIP_ANGLE_LIFTOFF = -0.123 #-0.123
         ANKLE_UNLOADING_LIFTOFF = 0.25 #0.25
 
         # PARAMETERS TO BE TUNED FOR HIP/KNEE ANGLE REFLEXES
@@ -130,7 +130,7 @@ class Reflexes(object):
         elif not self.HIP_EXTENSION_RULE:
             hip_extension_state = True
 
-        # ANKLE UNLOADING RULE
+            # ANKLE UNLOADING RULE
         if self.ANKLE_UNLOADING_RULE:
             ankle_unloading_state = (
                 self.forces[side + 'H_M_SOL'] < ANKLE_UNLOADING_LIFTOFF)

@@ -5,4 +5,4 @@ sceneTreePerspectives: 000000ff0000000100000002000000c00000011201000000060100000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 0 "controllers/mouse/mouse.py" "controllers/mouse/reflexes.py" "plugins/physics/fix_mouse/fix_mouse.c"
+textFiles: 1 "controllers/mouse/mouse.py" "controllers/mouse/reflexes.py" "plugins/physics/fix_mouse/fix_mouse.c"
