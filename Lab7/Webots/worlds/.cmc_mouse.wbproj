@@ -5,4 +5,4 @@ sceneTreePerspectives: 000000ff0000000100000002000000c00000011201000000060100000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 1 "plugins/physics/fix_mouse/fix_mouse.c" "controllers/mouse/reflexes.py" "controllers/mouse/muscle_visualization.py" "controllers/mouse/musculoskeletal/MusculoSkeletalSystem.py" "controllers/mouse/musculoskeletal/Muscle.py" "controllers/mouse/mouse.py"
+textFiles: 5 "plugins/physics/fix_mouse/fix_mouse.c" "controllers/mouse/reflexes.py" "controllers/mouse/muscle_visualization.py" "controllers/mouse/musculoskeletal/MusculoSkeletalSystem.py" "controllers/mouse/musculoskeletal/Muscle.py" "controllers/mouse/mouse.py"
